@@ -1,0 +1,60 @@
+﻿@model List<UserViewModel>
+@{
+	Layout = "_AdminLayout";
+}
+
+<div class="container mt-5">
+	<h2 class="text-center mb-5">List of Users</h2>
+
+	<!-- Create New Admin Button -->
+	<div class="text-center mb-4">
+		<a class="btn btn-primary" asp-controller="Admin" asp-action="CreateAdmin">Create New Admin</a>
+	</div>
+
+	<div class="form-group">
+		<a class="btn btn-primary" asp-controller="Admin" asp-action="Index">All</a>
+		<a class="btn btn-primary" asp-controller="Admin" asp-action="FilterUsers" asp-route-Type="Admin">Admins</a>
+		<a class="btn btn-primary" asp-controller="Admin" asp-action="FilterUsers" asp-route-Type="Customer">Customers</a>
+	</div>
+
+
+</div>
+<table class="table mt-4">
+	<thead>
+		<tr>
+			<th>No.</th>
+			<th>Name</th>
+			<th>Email</th>
+			<th>User Id</th>
+			<th>Phone Number</th>
+			<th>Address</th>
+			<th>User Type</th>
+			<th>Account Status</th>
+			<th>Created At</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		@{
+			int counter = 1;
+		}
+		@foreach (var user in Model)
+		{
+			<tr>
+				<td>@counter</td>
+				<td>@user.UserName</td>
+				<td>@user.Email</td>
+				<td>@user.Id</td>
+				<td>@user.PhoneNumber</td>
+				<td>@user.Address</td>
+				<td>@user.Type</td>
+				<td>@user.Status</td>
+				<td>@user.CreatedAt</td>
+				<td>
+					<a class="btn btn-primary" asp-controller="Admin" asp-action="EditUser" asp-route-email="@user.Email">Edit</a>
+				</td>
+			</tr>
+			counter++;
+		}
+	</tbody>
+</table>

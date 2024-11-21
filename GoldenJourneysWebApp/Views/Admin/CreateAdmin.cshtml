@@ -1,0 +1,41 @@
+﻿@model AdminCreateViewModel
+@{
+    Layout = "_AdminLayout";
+}
+
+<h2 class="text-center mb-5">Create New Admin</h2>
+
+<form method="post" class="container">
+    <div class="mb-3">
+        <label asp-for="UserName" class="form-label"></label>
+        <input type="text" asp-for="UserName" class="form-control" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input type="email" asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label"></label>
+        <input type="password" asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PhoneNumber" class="form-label"></label>
+        <input type="tel" asp-for="PhoneNumber" class="form-control" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Address" class="form-label"></label>
+        <input type="text" asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Admin</button>
+    <a class="btn btn-primary" asp-controller="Admin" asp-action="Index">Cancel</a>
+</form>

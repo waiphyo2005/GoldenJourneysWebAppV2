@@ -1,0 +1,59 @@
+﻿@model UserViewModel
+@{
+    Layout = "_AdminLayout";
+}
+<h2 class="text-center mb-5">Edit User Account</h2>
+
+<form method="post" class="container">
+
+    <div class="mb-3">
+        <label asp-for="Id" class="form-label"></label>
+        <input asp-for="Id" readonly class="form-control-plaintext" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="UserName" class="form-label"></label>
+        <input type="text" asp-for="UserName" class="form-control" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input type="email" asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PhoneNumber" class="form-label"></label>
+        <input type="tel" asp-for="PhoneNumber" class="form-control" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Address" class="form-label"></label>
+        <input type="text" asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Type" class="form-label"></label>
+        <input asp-for="Type" readonly class="form-control-plaintext" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Status" class="form-label"></label>
+        <select asp-for="Status" class="form-select">
+            <option value="Pending">Pending</option>
+            <option value="Active">Active</option>
+            <option value="Disabled">Disabled</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CreatedAt" class="form-label"></label>
+        <input asp-for="CreatedAt" readonly class="form-control-plaintext" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a class="btn btn-primary" asp-controller="Admin" asp-action="Index">Cancel</a>
+</form>
