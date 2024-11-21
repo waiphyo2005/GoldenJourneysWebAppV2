@@ -1,0 +1,48 @@
+﻿@model AccountProfileViewModel
+@{
+    Layout = "_Layout";
+}
+<h2 class="text-center mb-5">Profile</h2>
+<h4 class="text-success text-center mb-5">@TempData["Message"]</h4>
+<div class="container">
+    <div class="mb-3">
+        
+        <p class="form-control-plaintext">Username : @Model.UserName</p>
+    </div>
+
+    <div class="mb-3">
+        <p class="form-control-plaintext">Email : @Model.Email</p>
+    </div>
+
+    <div class="mb-3">
+        <p class="form-control-plaintext">
+            Phone Number : 
+            @if (Model.PhoneNumber != null)
+            {
+                @Model.PhoneNumber
+                ;
+            }
+            else
+            {
+                @("Phone Number not Provided.");
+            }
+        </p>
+    </div>
+
+    <div class="mb-4">
+        <p class="form-control-plaintext">
+            Address : 
+            @if(Model.Address != null)
+            {
+                @Model.Address;
+            }
+            else
+            {
+                @("Address not Provided.");
+            }
+        </p>
+    </div>
+    <a class="btn btn-primary" asp-controller="Home" asp-action="UpdateProfile" asp-route-email="@Model.Email">Update Profile</a>
+    <a class="btn btn-secondary" asp-controller="Admin" asp-action="EditProfile">Reset Password</a>
+    <a class="btn btn-danger" asp-controller="Home" asp-action="Logout">Logout</a>
+</div>

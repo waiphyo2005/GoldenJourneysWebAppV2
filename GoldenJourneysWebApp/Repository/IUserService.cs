@@ -12,6 +12,8 @@ namespace GoldenJourneysWebApp.Repository
         void CustomerRegister(CustomerRegistrationViewModel customer);
         UserViewModel GetUserByEmail(string userEmail);
         void UserEdit(string email, UserViewModel user);
-        bool ValidateUser(string Email, string Password);
+        bool ValidateUser(LoginViewModel loginUser);
+        AccountProfileViewModel GetProfileByEmail(string userEmail);
+        void UpdateAccount(string email, AccountProfileViewModel user);
     }
 }

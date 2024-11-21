@@ -1,0 +1,15 @@
+﻿@model UserViewModel
+@{
+    Layout = "_AdminLayout";
+}
+<div class="container mt-5">
+    <div class="text-center p-4 bg-light border rounded shadow-sm">
+        <h1 class="text-success mb-4">New Admin Created Successfully!</h1>
+        <p class="text-secondary">Name: @Model.UserName</p>
+        <p class="text-secondary">Email: @Model.Email</p>
+        <p class="text-secondary">Phone Number: @Model.PhoneNumber</p>
+        <div class="mt-4">
+            <a class="btn btn-primary btn-lg" asp-controller="Admin" asp-action="Index">Go to Dashboard</a>
+        </div>
+    </div>
+</div>

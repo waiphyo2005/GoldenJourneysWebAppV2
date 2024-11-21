@@ -107,15 +107,39 @@ namespace GoldenJourneysWebApp.Repository
                 _context.SaveChanges();
             }
         }
-        public bool ValidateUser(string Email, string Password)
+        public bool ValidateUser(LoginViewModel loginUser)
         {
-            var user = _context.Users.FirstOrDefault(x => x.Email == Email && x.Status == "Active");
+            var user = _context.Users.FirstOrDefault(x => x.Email == loginUser.Email && x.Status == "Active");
 
             if (user != null)
             {
-                return BCrypt.Net.BCrypt.Verify(Password, user.Password);
+                return BCrypt.Net.BCrypt.Verify(loginUser.Password, user.Password);
             }
             return false;
+        }
+        public AccountProfileViewModel GetProfileByEmail(string userEmail)
+        {
+            var user = _context.Users.Where(u => u.Email == userEmail)
+                .Select(x => new AccountProfileViewModel
+                {
+                    UserName = x.UserName,
+                    Email = x.Email,
+                    PhoneNumber = x.PhoneNumber,
+                    Address = x.Address,
+                }).SingleOrDefault();
+            return user;
+        }
+        public void UpdateAccount(string userEmail, AccountProfileViewModel user)
+        {
+            User existingUser = _context.Users.FirstOrDefault(u => u.Email == userEmail);
+            {
+                existingUser.UserName = user.UserName;
+                existingUser.Email = user.Email;
+                existingUser.PhoneNumber = user.PhoneNumber;
+                existingUser.Address = user.Address;
+                _context.Update(existingUser);
+                _context.SaveChanges();
+            }
         }
     }
 }

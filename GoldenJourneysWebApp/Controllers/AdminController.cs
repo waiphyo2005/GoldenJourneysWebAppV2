@@ -15,22 +15,30 @@ namespace GoldenJourneysWebApp.Controllers
         {
             _userService = userService;
         }
-        [Authorize]
+
+        //View Users
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             List<UserViewModel> users = _userService.GetUsers();
             return View(users);
         }
-		public IActionResult FilterUsers(string Type)
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult FilterUsers(string Type)
 		{
 			List<UserViewModel> users = _userService.FilterUsers(Type);
 			return View(users);
 		}
-		[Authorize]
-		public IActionResult CreateAdmin()
+
+
+        //Create New Admin
+        [Authorize(Roles = "Admin")]
+        public IActionResult CreateAdmin()
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult CreateAdmin(AdminCreateViewModel admin) 
         {
@@ -40,20 +48,28 @@ namespace GoldenJourneysWebApp.Controllers
                 if (!usedEmail)
                 {
                     _userService.AdminCreate(admin);
-                    return RedirectToAction("Index", "Admin");
+                    return RedirectToAction("CreationSuccess", "Admin", new {adminEmail = admin.Email});
                 }
                 ModelState.AddModelError(string.Empty, "Account already exist! Please use different Email.");
             }            
             return View(admin);
         }
 
-        
-		[Authorize]
-		public IActionResult EditUser(string email)
+        public IActionResult CreationSuccess(string adminEmail)
+        {
+            var admin = _userService.GetUserByEmail(adminEmail);
+            return View(admin);
+        }
+
+
+        //Edit User Details
+        [Authorize(Roles = "Admin")]
+        public IActionResult EditUser(string email)
         {
             UserViewModel user = _userService.GetUserByEmail(email);
             return View(user);
         }
+
         [HttpPost]
         public IActionResult EditUser(string email, UserViewModel user)
         {
@@ -61,9 +77,20 @@ namespace GoldenJourneysWebApp.Controllers
             {
                 return View(user);
             }
+            TempData["Message"] = "Record has been Updated!";
             _userService.UserEdit(email, user);
             return RedirectToAction("Index", "Admin");
         }
 
-	}
+
+        //Admin Profile
+        [Authorize(Roles = "Admin")]
+        public IActionResult AdminProfile()
+        {
+            UserViewModel admin = _userService.GetUserByEmail(HttpContext.User.Identity.Name);
+            return View(admin);
+        }
+
+
+    }
 }

@@ -1,5 +1,6 @@
 using GoldenJourneysWebApp.Data;
 using GoldenJourneysWebApp.Repository;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,12 +16,13 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 
 builder.Services.AddScoped<IUserService, UserService>();
 
-builder.Services.AddSession();
-builder.Services.AddAuthentication("CookieAuthentication")
-	.AddCookie("CookieAuthentication", options =>
-	{
-		options.LoginPath = "/User/Login";
-	});
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+{
+    options.LoginPath = "/Home/Login";
+
+    options.AccessDeniedPath = "/Home/AccessDenied";
+}); ;
+
 
 var app = builder.Build();
 
@@ -36,8 +38,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
-app.UseSession();
 
 app.UseAuthentication();
 

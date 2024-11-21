@@ -12,6 +12,7 @@ namespace GoldenJourneysWebApp.Models
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
         public string Type { get; set; }
+        [Required(ErrorMessage = "Account Status is required.")]
         public string Status { get; set; }
         public DateOnly CreatedAt { get; set; }
 

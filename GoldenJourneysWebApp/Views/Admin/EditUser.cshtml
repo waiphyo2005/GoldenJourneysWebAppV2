@@ -19,7 +19,7 @@
 
     <div class="mb-3">
         <label asp-for="Email" class="form-label"></label>
-        <input type="email" asp-for="Email" class="form-control" />
+        <input type="email" asp-for="Email" class="form-control" readonly />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
 
@@ -43,10 +43,12 @@
     <div class="mb-3">
         <label asp-for="Status" class="form-label"></label>
         <select asp-for="Status" class="form-select">
-            <option value="Pending">Pending</option>
+            <option value="" selected disabled>Select Account Status</option>
             <option value="Active">Active</option>
             <option value="Disabled">Disabled</option>
+            <option value="Pending">Pending</option>
         </select>
+        <span asp-validation-for="Status" class="text-danger"></span>
     </div>
 
     <div class="mb-3">

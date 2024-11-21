@@ -1,8 +1,11 @@
 using System.Diagnostics;
 using System.Security.Claims;
+using System.Web.Helpers;
+using GoldenJourneysWebApp.Data.Entities;
 using GoldenJourneysWebApp.Models;
 using GoldenJourneysWebApp.Repository;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,12 +22,12 @@ namespace GoldenJourneysWebApp.Controllers
         {
             return View();
         }
-        [Authorize]
+        [Authorize(Roles = "Customer")]
         public IActionResult Privacy()
         {
             return View();
         }
-		public IActionResult RegisterCustomer()
+        public IActionResult RegisterCustomer()
 		{
 			return View();
 		}
@@ -37,60 +40,104 @@ namespace GoldenJourneysWebApp.Controllers
 				if (!usedEmail)
 				{
 					_userService.CustomerRegister(customer);
-					return RedirectToAction("Login", "Home");
+					return RedirectToAction("RegisterSuccess", "Home", new { userEmail = customer.Email});
 				}
 				ModelState.AddModelError(string.Empty, "Account already exist! Please use different Email.");
 			}
 			return View(customer);
 		}
-
+		public IActionResult RegisterSuccess(string userEmail)
+		{
+			var user = _userService.GetUserByEmail(userEmail);
+			return View(user);
+		}
 		public IActionResult Login()
 		{
 			return View();
 		}
-
 		[HttpPost]
-		public async Task<IActionResult> Login(string Email, string Password)
+		public IActionResult Login(LoginViewModel loginUser)
 		{
 			if (ModelState.IsValid)
 			{
-				bool Validity = _userService.ValidateUser(Email, Password);
+				bool Validity = _userService.ValidateUser(loginUser);
 				if (Validity)
 				{
-					var user = _userService.GetUserByEmail(Email);
-
-					// Create claims based on the user data
-					var claims = new List<Claim>
-			{
-				new Claim(ClaimTypes.Email, user.Email),          // Store user's email
-                new Claim("UserType", user.Type)                  // Store user type (Admin, Customer, etc.)
-            };
-
-					// Create the user's identity
-					var identity = new ClaimsIdentity(claims, "CookieAuthentication");
-					var principal = new ClaimsPrincipal(identity);
-
-					// Sign in the user
-					await HttpContext.SignInAsync("CookieAuthentication", principal);
-
-					// Redirect based on user type
-					if (user.Type == "Admin")
+					var user = _userService.GetUserByEmail(loginUser.Email);
+					if (user != null)
 					{
-						return RedirectToAction("Index", "Admin");  // Redirect to Admin panel
+						if(user.Type == "Admin")
+						{
+							var claims = new List<Claim>
+							{
+                                new Claim(ClaimTypes.Name, user.Email),
+                                new Claim(ClaimTypes.Role, user.Type),
+
+                            };
+
+							var claimsIdentity = new ClaimsIdentity(claims,CookieAuthenticationDefaults.AuthenticationScheme);
+							HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+							return RedirectToAction("Index", "Admin");
+						}
+						if (user.Type == "Customer")
+						{
+                            var claims = new List<Claim>
+                            {
+                                new Claim(ClaimTypes.Name, user.Email),
+                                new Claim(ClaimTypes.Role, user.Type),
+
+                            };
+
+                            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+                            return RedirectToAction("Privacy", "Home");
+                        }
 					}
-
-					// Redirect to Home page for normal users
-					return RedirectToAction("Index", "Home");
 				}
-
-				// If the user credentials are incorrect
 				ModelState.AddModelError(string.Empty, "Incorrect email or password.");
 			}
-
-			return View();
+			return View(loginUser);
 		}
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+        public IActionResult Logout()
+        {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
+        }
 
-		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [Authorize(Roles = "Customer")]
+        public IActionResult CustomerProfile()
+        {
+            AccountProfileViewModel user = _userService.GetProfileByEmail(HttpContext.User.Identity.Name);
+            return View(user);
+        }
+
+        //Update Profile Details
+        [Authorize(Roles = "Customer")]
+        public IActionResult UpdateProfile(string email)
+        {
+            AccountProfileViewModel user = _userService.GetProfileByEmail(email);
+            return View(user);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateProfile(string email, AccountProfileViewModel user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(user);
+            }
+            _userService.UpdateAccount(email, user);
+            TempData["Message"] = "Account has been Updated!";
+            return RedirectToAction("CustomerProfile", "Home");
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

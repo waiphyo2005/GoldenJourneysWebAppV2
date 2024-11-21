@@ -1,6 +1,6 @@
 ﻿namespace GoldenJourneysWebApp.Models
 {
-	public class AccountProfile
+	public class AccountProfileViewModel
 	{
 		public string UserName { get; set; }
 		public string Email { get; set; }

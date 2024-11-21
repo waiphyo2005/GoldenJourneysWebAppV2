@@ -1,0 +1,17 @@
+﻿@model UserViewModel
+@{
+	Layout = "_Layout";
+}
+<div class="container mt-5">
+    <div class="text-center p-4 bg-light border rounded shadow-sm">
+        <h1 class="text-success mb-4">Registration Successful</h1>
+        <h3 class="text-secondary">Welcome to Golden Journeys, <span class="fw-bold">@Model.UserName</span> !</h3>
+        <div class="mt-4">
+            <a class="btn btn-primary btn-lg" asp-controller="Home" asp-action="Login">Login</a>
+        </div>
+    </div>
+</div>
+
+
+
+
