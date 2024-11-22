@@ -18,19 +18,37 @@ namespace GoldenJourneysWebApp.Controllers
 		{
 			_userService = userService;
 		}
+
+
+        //Home Page (Not Login)
 		public IActionResult Index()
         {
             return View();
         }
+
+
+        //Home Page (Login)
+        [Authorize(Roles = "Customer")]
+        public IActionResult LoginHome()
+        {
+            return View();
+        }
+
+
+        //Privacy Page
         [Authorize(Roles = "Customer")]
         public IActionResult Privacy()
         {
             return View();
         }
+
+
+        //Register Customer
         public IActionResult RegisterCustomer()
 		{
 			return View();
 		}
+
 		[HttpPost]
 		public IActionResult RegisterCustomer(CustomerRegistrationViewModel customer)
 		{
@@ -46,15 +64,20 @@ namespace GoldenJourneysWebApp.Controllers
 			}
 			return View(customer);
 		}
+
 		public IActionResult RegisterSuccess(string userEmail)
 		{
 			var user = _userService.GetUserByEmail(userEmail);
 			return View(user);
 		}
+
+
+        //Login
 		public IActionResult Login()
 		{
 			return View();
 		}
+
 		[HttpPost]
 		public IActionResult Login(LoginViewModel loginUser)
 		{
@@ -92,7 +115,7 @@ namespace GoldenJourneysWebApp.Controllers
                             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                             HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                            return RedirectToAction("Privacy", "Home");
+                            return RedirectToAction("LoginHome", "Home");
                         }
 					}
 				}
@@ -100,28 +123,37 @@ namespace GoldenJourneysWebApp.Controllers
 			}
 			return View(loginUser);
 		}
+
+
+        //Access Denied
         public IActionResult AccessDenied()
         {
             return View();
         }
+
+
+        //Logout
         public IActionResult Logout()
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
 
+
+        //Customer Profile
         [Authorize(Roles = "Customer")]
         public IActionResult CustomerProfile()
         {
-            AccountProfileViewModel user = _userService.GetProfileByEmail(HttpContext.User.Identity.Name);
+            var user = _userService.GetProfileByEmail(HttpContext.User.Identity.Name);
             return View(user);
         }
+
 
         //Update Profile Details
         [Authorize(Roles = "Customer")]
         public IActionResult UpdateProfile(string email)
         {
-            AccountProfileViewModel user = _userService.GetProfileByEmail(email);
+            var user = _userService.GetProfileByEmail(email);
             return View(user);
         }
 
@@ -137,7 +169,28 @@ namespace GoldenJourneysWebApp.Controllers
             return RedirectToAction("CustomerProfile", "Home");
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+
+        //Reset Password
+        public IActionResult ResetPassword(string email)
+        {
+            var user = _userService.GetUserForPasswordReset(email);
+            return View(user);
+        }
+        [HttpPost]
+        public IActionResult ResetPassword(string email, ResetPasswordViewModel user)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(user);
+			}
+			_userService.UpdatePassword(email, user);
+			TempData["Message"] = "Password has been Updated!";
+			return RedirectToAction("CustomerProfile", "Home");
+		}
+
+
+
+		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

@@ -141,5 +141,26 @@ namespace GoldenJourneysWebApp.Repository
                 _context.SaveChanges();
             }
         }
-    }
+        public ResetPasswordViewModel GetUserForPasswordReset(string email)
+        {
+			var user = _context.Users.Where(u => u.Email == email)
+				.Select(x => new ResetPasswordViewModel
+				{
+					Email = x.Email,
+                    Password = x.Password,
+				}).SingleOrDefault();
+			return user;
+		}
+		public void UpdatePassword(string email, ResetPasswordViewModel user)
+		{
+			User existingUser = _context.Users.FirstOrDefault(u => u.Email == email);
+			{
+				existingUser.Email = user.Email;
+                existingUser.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+				_context.Update(existingUser);
+				_context.SaveChanges();
+			}
+		}
+
+	}
 }

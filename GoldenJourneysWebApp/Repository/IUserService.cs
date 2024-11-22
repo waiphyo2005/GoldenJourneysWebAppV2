@@ -15,5 +15,7 @@ namespace GoldenJourneysWebApp.Repository
         bool ValidateUser(LoginViewModel loginUser);
         AccountProfileViewModel GetProfileByEmail(string userEmail);
         void UpdateAccount(string email, AccountProfileViewModel user);
+        ResetPasswordViewModel GetUserForPasswordReset(string email);
+        void UpdatePassword(string email, ResetPasswordViewModel user);
     }
 }

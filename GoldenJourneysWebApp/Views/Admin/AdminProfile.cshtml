@@ -3,7 +3,7 @@
     Layout = "_AdminLayout";
 }
 <h2 class="text-center mb-5">Admin Profile</h2>
-
+<h4 class="text-success text-center mb-5">@TempData["Message"]</h4>
 <div class="container">
     <div class="mb-3">
 
@@ -24,6 +24,6 @@
 
     <!-- Profile update and logout buttons -->
     <a class="btn btn-primary" asp-controller="Admin" asp-action="EditUser" asp-route-email="@Model.Email">Update Profile</a>
-    <a class="btn btn-secondary" asp-controller="Admin" asp-action="EditProfile">Reset Password</a>
+    <a class="btn btn-secondary" asp-controller="Admin" asp-action="AdminResetPassword" asp-route-email="@Model.Email">Reset Password</a>
     <a class="btn btn-danger" asp-controller="Home" asp-action="Logout">Logout</a>
 </div>

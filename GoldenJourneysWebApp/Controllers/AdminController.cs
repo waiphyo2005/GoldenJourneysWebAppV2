@@ -92,5 +92,23 @@ namespace GoldenJourneysWebApp.Controllers
         }
 
 
+        //Reset Password
+        public IActionResult AdminResetPassword(string email)
+        {
+            var user = _userService.GetUserForPasswordReset(email);
+            return View(user);
+        }
+        [HttpPost]
+        public IActionResult AdminResetPassword(string email, ResetPasswordViewModel user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(user);
+            }
+            _userService.UpdatePassword(email, user);
+            TempData["Message"] = "Password has been Updated!";
+            return RedirectToAction("AdminProfile", "Admin");
+        }
+
     }
 }
