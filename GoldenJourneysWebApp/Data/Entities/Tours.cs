@@ -16,6 +16,10 @@ namespace GoldenJourneysWebApp.Data.Entities
         public double Price { get; set; }
 
         public string? Description { get; set; }
+        [Required]
+        public DateOnly Created { get; set; }
+        [Required]
+        public string Status { get; set; }
         public ICollection<ToursMediaContent> ToursMediaContent { get; set; }
         public ICollection<TourAvailability> TourAvailability { get; set; }
     }

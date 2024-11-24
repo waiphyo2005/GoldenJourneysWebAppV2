@@ -1,0 +1,79 @@
+﻿@model TourCreateViewModel
+@{
+    Layout = "_AdminLayout";
+}
+<h2 class="text-center mb-5">Create New Tour Package</h2>
+
+<form method="post" class="container" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input type="text" asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Type" class="form-label"></label>
+        <input type="text" asp-for="Type" class="form-control" />
+        <span asp-validation-for="Type" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Location" class="form-label"></label>
+        <input type="text" asp-for="Location" class="form-control" />
+        <span asp-validation-for="Location" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label"></label>
+        <input type="number" asp-for="Price" class="form-control" min="0" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-5">
+        <label asp-for="Images" class="control-label mb-3"></label>
+        <input type="file" asp-for="Images" class="form-control" id="images" accept="image/*" multiple />
+        <span asp-validation-for="Images" class="text-danger"></span>
+        <ul id="fileNames"></ul>
+    </div>
+    
+
+    <h4 class="mb-5">Please Select the Date Range and Capacity of each date that will be avaliable.</h4>
+    <div class="mb-3">
+        <label asp-for="StartDate" class="form-label"></label>
+        <input type="date" asp-for="StartDate" class="form-control" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="EndDate" class="form-label"></label>
+        <input type="date" asp-for="EndDate" class="form-control" />
+        <span asp-validation-for="EndDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Capacity" class="form-label"></label>
+        <input type="number" asp-for="Capacity" class="form-control" min="1"/>
+        <span asp-validation-for="Capacity" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Tour</button>
+    <a class="btn btn-primary" asp-controller="Tour" asp-action="Index">Cancel</a>
+</form>
+
+<script>
+    document.getElementById('images').addEventListener('change', function () {
+        const fileNamesList = document.getElementById('fileNames');
+        fileNamesList.innerHTML = ""; // Clear existing list
+
+        // Loop through selected files
+        Array.from(this.files).forEach(file => {
+            const listItem = document.createElement("li");
+            listItem.textContent = file.name; // Add file name
+            fileNamesList.appendChild(listItem); // Append to list
+        });
+    });
+</script>

@@ -14,6 +14,8 @@ namespace GoldenJourneysWebApp.Data.Entities
         [Required]
         public DateOnly AvailableDate {  get; set; }
         [Required]
+        public int OriginalCapacity { get; set; }
+        [Required]
         public int AvailableCapacity { get; set; }
         public ICollection<BookingTour> BookingTour { get; set; }
     }

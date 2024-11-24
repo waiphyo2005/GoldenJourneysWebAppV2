@@ -1,0 +1,58 @@
+﻿@model List<TourViewModel>
+@{
+	Layout = "_AdminLayout";
+}
+
+<div class="container mt-5">
+	<h2 class="text-center mb-5">List of Tours</h2>
+	@* <h4 class="text-success text-center mb-5">@TempData["Message"]</h4>
+
+	*@
+	<div class="text-center mb-4">
+		<a class="btn btn-primary" asp-controller="Tour" asp-action="CreateTour">Create New Tour Package</a>
+	</div>
+
+	<div class="form-group">
+	<a class="btn btn-primary" asp-controller="Tour" asp-action="Index">All</a>
+	<a class="btn btn-primary" asp-controller="Tour" asp-action="FilterTours" asp-route-Status="Active">Active</a>
+	<a class="btn btn-primary" asp-controller="Tour" asp-action="FilterTours" asp-route-Status="Disabled">Disabled</a>
+	</div> 
+</div>
+
+<table class="table mt-4">
+	<thead>
+		<tr>
+			<th>No.</th>
+			<th>Name</th>
+			<th>Tour Id</th>
+			<th>Type</th>
+			<th>Location</th>
+			<th>Price</th>
+			<th>Tour Status</th>
+			<th>Created At</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		@{
+			int counter = 1;
+		}
+		@foreach (var tour in Model)
+		{
+			<tr>
+				<td>@counter</td>
+				<td>@tour.Name</td>
+				<td>@tour.Id</td>
+				<td>@tour.Type</td>
+				<td>@tour.Location</td>
+				<td>@tour.Price</td>
+				<td>@tour.Status</td>
+				<td>@tour.Created</td>
+				@* <td>
+			<a class="btn btn-primary" asp-controller="Admin" asp-action="EditUser" asp-route-email="@user.Email">Edit</a>
+			</td> *@
+			</tr>
+			counter++;
+		}
+	</tbody>
+</table>

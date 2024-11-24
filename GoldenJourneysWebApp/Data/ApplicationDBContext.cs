@@ -28,6 +28,9 @@ namespace GoldenJourneysWebApp.Data
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
+            modelBuilder.Entity<Tours>()
+                .HasIndex(t => t.Name)
+                .IsUnique();
         }
     }
 }
