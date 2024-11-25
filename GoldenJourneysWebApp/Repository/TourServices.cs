@@ -33,15 +33,15 @@ namespace GoldenJourneysWebApp.Repository
         {
             return _context.Tours.Where(t => t.Status == Status)
                 .Select(x => new TourViewModel
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Type = x.Type,
-                Location = x.Location,
-                Price = x.Price,
-                Created = x.Created,
-                Status = x.Status,
-            }).ToList();
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Type = x.Type,
+                    Location = x.Location,
+                    Price = x.Price,
+                    Created = x.Created,
+                    Status = x.Status,
+                }).ToList();
         }
 
         public bool ValidateTourName(TourCreateViewModel model)
@@ -91,7 +91,7 @@ namespace GoldenJourneysWebApp.Repository
 
             using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
-               image.CopyTo(fileStream);
+                image.CopyTo(fileStream);
             }
             return fileName;
         }
@@ -114,14 +114,33 @@ namespace GoldenJourneysWebApp.Repository
                 _context.SaveChanges();
             }
         }
-        public List<DateOnly> CreateDateList (DateOnly StartDate, DateOnly EndDate)
+        public List<DateOnly> CreateDateList(DateOnly StartDate, DateOnly EndDate)
         {
             List<DateOnly> dateList = new List<DateOnly>();
-            for(DateOnly date = StartDate; date < EndDate; date = date.AddDays(1))
+            for (DateOnly date = StartDate; date < EndDate; date = date.AddDays(1))
             {
                 dateList.Add(date);
             }
             return dateList;
+        }
+
+
+        public TourViewModel GetTourDetails(int Id)
+        {
+            var tour = _context.Tours.Where(t => t.Id == Id)
+                .Select(x => new TourViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Type = x.Type,
+                    Location = x.Location,
+                    Price = x.Price,
+                    Description = x.Description,
+                    Status = x.Status,
+                    Created = x.Created,
+                    ImageURLs = x.ToursMediaContent.Select(m => m.MediaPathURL).ToList(),
+                }).SingleOrDefault();
+            return tour;
         }
     }
 }

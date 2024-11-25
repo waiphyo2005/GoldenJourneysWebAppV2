@@ -86,5 +86,13 @@ namespace GoldenJourneysWebApp.Controllers
             return View(tour);
         }
 
+
+        //View Tour Details
+        public IActionResult ViewDetails(int id)
+        {
+            var tourDetails = _tourService.GetTourDetails(id);
+            return View(tourDetails);
+        }
+
     }
 }

@@ -11,5 +11,8 @@ namespace GoldenJourneysWebApp.Models
         public double Price { get; set; }
         public DateOnly Created {  get; set; }
         public string Status { get; set; }
+        public string Description { get; set; }
+        public List<string> ImageURLs { get; set; }
+
     }
 }
