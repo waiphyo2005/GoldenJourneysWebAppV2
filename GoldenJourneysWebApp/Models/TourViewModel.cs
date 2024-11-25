@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using GoldenJourneysWebApp.Data.Entities;
 
 namespace GoldenJourneysWebApp.Models
 {
@@ -13,6 +14,7 @@ namespace GoldenJourneysWebApp.Models
         public string Status { get; set; }
         public string Description { get; set; }
         public List<string> ImageURLs { get; set; }
+        public List<TourAvailability> AvalibleSlots { get; set; }
 
     }
 }

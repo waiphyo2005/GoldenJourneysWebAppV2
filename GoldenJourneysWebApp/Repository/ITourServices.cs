@@ -10,6 +10,8 @@ namespace GoldenJourneysWebApp.Repository
         void UploadTourImages(TourCreateViewModel tour);
         bool ValidateTourName (TourCreateViewModel tour);
         void UploadAvailabilitySlots(TourCreateViewModel tour);
-        TourViewModel GetTourDetails(int Id);
+        TourViewModel GetTourAllDetails(int Id);
+        TourDetailEditViewModel GetTourDetails(int Id);
+        void UploadTourDetails(TourDetailEditViewModel tour);
     }
 }

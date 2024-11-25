@@ -125,7 +125,7 @@ namespace GoldenJourneysWebApp.Repository
         }
 
 
-        public TourViewModel GetTourDetails(int Id)
+        public TourViewModel GetTourAllDetails(int Id)
         {
             var tour = _context.Tours.Where(t => t.Id == Id)
                 .Select(x => new TourViewModel
@@ -139,8 +139,39 @@ namespace GoldenJourneysWebApp.Repository
                     Status = x.Status,
                     Created = x.Created,
                     ImageURLs = x.ToursMediaContent.Select(m => m.MediaPathURL).ToList(),
+                    AvalibleSlots = x.TourAvailability.ToList(),
                 }).SingleOrDefault();
             return tour;
+        }
+        public TourDetailEditViewModel GetTourDetails(int Id)
+        {
+            var tour = _context.Tours.Where(t => t.Id == Id)
+                .Select(x => new TourDetailEditViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Type = x.Type,
+                    Location = x.Location,
+                    Price = x.Price,
+                    Description = x.Description,
+                    Status = x.Status,
+                }).SingleOrDefault();
+            return tour;
+        }
+        public void UploadTourDetails(TourDetailEditViewModel tour)
+        {
+            Tours existingDetails = _context.Tours.FirstOrDefault(t => t.Id == tour.Id);
+            {
+                existingDetails.Name = tour.Name;
+                existingDetails.Type = tour.Type;
+                existingDetails.Location = tour.Location;
+                existingDetails.Price = tour.Price;
+                existingDetails.Description = tour.Description;
+                existingDetails.Status = tour.Status;
+                _context.Tours.Update(existingDetails);
+                _context.SaveChanges();
+            }
+
         }
     }
 }

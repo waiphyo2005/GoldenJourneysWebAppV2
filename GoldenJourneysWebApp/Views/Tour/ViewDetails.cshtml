@@ -3,7 +3,7 @@
 	Layout = "_AdminLayout";
 }
 <h2 class="text-center mb-5">@Model.Name</h2>
-
+<h4 class="text-success text-center mb-5">@TempData["Message"]</h4>
 <form method="post" class="container" enctype="multipart/form-data">
     <div class="mb-3">
         <label asp-for="Id" class="form-label"></label>
@@ -38,13 +38,15 @@
         <input type="date" asp-for="Created" class="form-control" readonly />
     </div>
 
-    <div class="mb-3">
+    <div class="mb-5">
         <label asp-for="Status" class="form-label"></label>
         <input type="text" asp-for="Status" class="form-control" readonly />
     </div>
 
-    <div class="container mt-4">
-        <label class="form-label">Tour Package Images</label>
+    <a class="btn btn-primary mb-5" asp-controller="Tour" asp-action="EditTourDetails" asp-route-Id="@Model.Id">Edit</a>
+
+    <h4 class="mb-5">Package Gallary</h4>
+    <div class="container mt-4 mb-5">
         <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
             @if(Model.ImageURLs.Count() != 0)
             {
@@ -63,28 +65,48 @@
         </div>
     </div>
 
-
-
-
-    @* <h4 class="mb-5">Please Select the Date Range and Capacity of each date that will be avaliable.</h4>
-    <div class="mb-3">
-        <label asp-for="StartDate" class="form-label"></label>
-        <input type="date" asp-for="StartDate" class="form-control" />
-        <span asp-validation-for="StartDate" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="EndDate" class="form-label"></label>
-        <input type="date" asp-for="EndDate" class="form-control" />
-        <span asp-validation-for="EndDate" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Capacity" class="form-label"></label>
-        <input type="number" asp-for="Capacity" class="form-control" min="1" />
-        <span asp-validation-for="Capacity" class="text-danger"></span>
+    <h4 class="mb-5">Package Availabilty Slots</h4>
+    @* <div class="mb-5">
+        <label class="form-label">Search by Date:</label>
+        <input type="date" class="form-control" />
     </div> *@
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Date</th>
+                <th>Initial Capacity</th>
+                <th>Available Capacity</th>
+                <th>Slot Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int counter = 1;
+            }
+            @if(Model.AvalibleSlots.Count != 0)
+            {
+                foreach (var slot in Model.AvalibleSlots)
+                {
+                    <tr>
+                        <td>@counter.</td>
+                        <td>@slot.AvailableDate</td>
+                        <td>@slot.OriginalCapacity pax</td>
+                        <td>@slot.AvailableCapacity pax</td>
+                        <td>@slot.Id</td>
+                    </tr>
+                    counter++;
+                }
+            }
+            else
+            {
+                <tr>
+                    <td class="text-danger">Package not available on any dates.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-    @* <button type="submit" class="btn btn-primary">Create Tour</button> *@
-    <a class="btn btn-primary mt-5" asp-controller="Tour" asp-action="Index">Cancel</a>
+    <a class="btn btn-primary mt-5" asp-controller="Tour" asp-action="Index">Go Back</a>
+
 </form>

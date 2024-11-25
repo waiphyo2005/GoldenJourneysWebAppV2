@@ -90,9 +90,29 @@ namespace GoldenJourneysWebApp.Controllers
         //View Tour Details
         public IActionResult ViewDetails(int id)
         {
-            var tourDetails = _tourService.GetTourDetails(id);
+            TourViewModel tourDetails = _tourService.GetTourAllDetails(id);
             return View(tourDetails);
         }
 
+
+        //Edit Tour Details (Name, location, etc..)
+        [HttpGet]
+        public IActionResult EditTourDetails(int id)
+        {
+            TourDetailEditViewModel tourDetails = _tourService.GetTourDetails(id);
+            return View(tourDetails);
+        }
+
+        [HttpPost]
+        public IActionResult EditTourDetails(TourDetailEditViewModel tour)
+        {
+            if (ModelState.IsValid)
+            {
+                _tourService.UploadTourDetails(tour);
+                TempData["Message"] = "Tour Package Details has been successfully updated!";
+                return RedirectToAction("ViewDetails", "Tour", new { id = tour.Id });
+            }
+            return View(tour);
+        }
     }
 }
