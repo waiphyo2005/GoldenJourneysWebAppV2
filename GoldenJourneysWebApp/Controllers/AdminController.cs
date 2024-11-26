@@ -18,6 +18,7 @@ namespace GoldenJourneysWebApp.Controllers
 
         //View Users
         [Authorize(Roles = "Admin")]
+        [HttpGet]
         public IActionResult Index()
         {
             List<UserViewModel> users = _userService.GetUsers();
@@ -25,6 +26,7 @@ namespace GoldenJourneysWebApp.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        [HttpGet]
         public IActionResult FilterUsers(string Type)
 		{
 			List<UserViewModel> users = _userService.FilterUsers(Type);
@@ -34,6 +36,7 @@ namespace GoldenJourneysWebApp.Controllers
 
         //Create New Admin
         [Authorize(Roles = "Admin")]
+        [HttpGet]
         public IActionResult CreateAdmin()
         {
             return View();
@@ -64,6 +67,7 @@ namespace GoldenJourneysWebApp.Controllers
 
         //Edit User Details
         [Authorize(Roles = "Admin")]
+        [HttpGet]
         public IActionResult EditUser(string email)
         {
             UserViewModel user = _userService.GetUserByEmail(email);
@@ -85,6 +89,7 @@ namespace GoldenJourneysWebApp.Controllers
 
         //Admin Profile
         [Authorize(Roles = "Admin")]
+        [HttpGet]
         public IActionResult AdminProfile()
         {
             UserViewModel admin = _userService.GetUserByEmail(HttpContext.User.Identity.Name);
@@ -93,6 +98,7 @@ namespace GoldenJourneysWebApp.Controllers
 
 
         //Reset Password
+        [HttpGet]
         public IActionResult AdminResetPassword(string email)
         {
             var user = _userService.GetUserForPasswordReset(email);

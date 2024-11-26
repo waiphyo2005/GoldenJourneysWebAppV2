@@ -138,7 +138,7 @@ namespace GoldenJourneysWebApp.Repository
                     Description = x.Description,
                     Status = x.Status,
                     Created = x.Created,
-                    ImageURLs = x.ToursMediaContent.Select(m => m.MediaPathURL).ToList(),
+                    ImageURLs = x.ToursMediaContent.ToList(),
                     AvalibleSlots = x.TourAvailability.ToList(),
                 }).SingleOrDefault();
             return tour;
@@ -171,7 +171,58 @@ namespace GoldenJourneysWebApp.Repository
                 _context.Tours.Update(existingDetails);
                 _context.SaveChanges();
             }
+        }
+        public List<TourGalleryModel> GetTourGallery(int Id)
+        {
+            var gallery = _context.ToursMediaContents.Where(t => t.TourId == Id)
+                .Select(x => new TourGalleryModel
+                {
+                    Id = x.Id,
+                    TourId = x.TourId,
+                    Title = x.Title,
+                    MediaUrl = x.MediaPathURL,
+                }).ToList();
+            if (gallery.Count > 0)
+            {
+                return gallery;
+            }
+            return null;
+        }
 
+        public TourGalleryModel GetImage(int Id)
+        {
+            var image = _context.ToursMediaContents.Where(t => t.Id == Id)
+               .Select(x => new TourGalleryModel
+               {
+                   Id = x.Id,
+                   TourId = x.TourId,
+                   Title = x.Title,
+                   MediaUrl = x.MediaPathURL,
+               }).FirstOrDefault();
+
+            return image;
+        }
+        public void RemoveImage(int id)
+        {
+            var RemoveImage = _context.ToursMediaContents.Where(r => r.Id == id).SingleOrDefault();
+            _context.ToursMediaContents.Remove(RemoveImage);
+            _context.SaveChanges();
+        }
+
+        public void AddTourImages(AddImageModel image)
+        {
+            foreach (var pic in image.Images)
+            {
+                string url = InsertImages(pic);
+                var newTourMedia = new ToursMediaContent
+                {
+                    TourId = image.Id,
+                    Title = url,
+                    MediaPathURL = url,
+                };
+                _context.ToursMediaContents.Add(newTourMedia);
+                _context.SaveChanges();
+            }
         }
     }
 }

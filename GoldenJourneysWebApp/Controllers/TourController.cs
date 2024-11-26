@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using GoldenJourneysWebApp.Data.Entities;
 using GoldenJourneysWebApp.Models;
 using GoldenJourneysWebApp.Repository;
 using Microsoft.AspNetCore.Authorization;
@@ -18,6 +19,7 @@ namespace GoldenJourneysWebApp.Controllers
 
         //View Tours
         [Authorize(Roles = "Admin")]
+        [HttpGet]
         public IActionResult Index()
         {
             List<TourViewModel> tours = _tourService.GetTours();
@@ -25,6 +27,7 @@ namespace GoldenJourneysWebApp.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        [HttpGet]
         public IActionResult FilterTours(string Status)
         {
             List<TourViewModel> tours = _tourService.FilterTours(Status);
@@ -34,6 +37,7 @@ namespace GoldenJourneysWebApp.Controllers
 
 		//Create Tours
 		[Authorize(Roles = "Admin")]
+        [HttpGet]
         public IActionResult CreateTour()
         {
             return View();
@@ -88,6 +92,7 @@ namespace GoldenJourneysWebApp.Controllers
 
 
         //View Tour Details
+        [HttpGet]
         public IActionResult ViewDetails(int id)
         {
             TourViewModel tourDetails = _tourService.GetTourAllDetails(id);
@@ -113,6 +118,63 @@ namespace GoldenJourneysWebApp.Controllers
                 return RedirectToAction("ViewDetails", "Tour", new { id = tour.Id });
             }
             return View(tour);
+        }
+
+
+        //Edit Tour Details (Gallery)
+        [HttpGet]
+        public IActionResult EditGallery(int id)
+        {
+            var tourGallery = _tourService.GetTourGallery(id);
+            if(tourGallery == null)
+            {
+                return RedirectToAction("AddImages", "Tour", new { id = id });
+            }
+            return View(tourGallery);
+        }
+        [HttpGet]
+        public IActionResult SelectDeleteImage(int id)
+        {
+            var image = _tourService.GetImage(id);
+            return View(image);
+        }
+        public IActionResult RemoveImage(int id, int tourId)
+        {
+            _tourService.RemoveImage(id);
+            TempData["Message"] = "Image has been successfully removed!";
+            return RedirectToAction("EditGallery", "Tour", new { id = tourId });
+        }
+        [HttpGet]
+        public ActionResult AddImages(int id)
+        {
+            ViewData["TourId"] = id;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult AddImages(AddImageModel image)
+        {
+            ViewData["TourId"] = image.Id;
+            if (image.Images != null)
+            {
+                string pattern = @"\.(jpg|jpeg|png|gif|bmp)$";
+                Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+
+                foreach (var pic in image.Images)
+                {
+                    if (!regex.IsMatch(pic.FileName))
+                    {
+                        ModelState.AddModelError("Images", $"Invalid File Type for {pic.FileName}! Please upload image files only.");
+                    }
+                }
+            }
+            if (ModelState.IsValid)
+            {
+                _tourService.AddTourImages(image);
+                TempData["Message"] = "Image has been successfully added!";
+                return RedirectToAction("EditGallery", "Tour", new { id = image.Id });
+            }
+            return View(image);
+            
         }
     }
 }

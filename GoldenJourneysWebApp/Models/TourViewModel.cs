@@ -13,7 +13,7 @@ namespace GoldenJourneysWebApp.Models
         public DateOnly Created {  get; set; }
         public string Status { get; set; }
         public string Description { get; set; }
-        public List<string> ImageURLs { get; set; }
+        public List<ToursMediaContent> ImageURLs { get; set; }
         public List<TourAvailability> AvalibleSlots { get; set; }
 
     }

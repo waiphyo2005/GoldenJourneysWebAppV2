@@ -1,0 +1,34 @@
+﻿@model AddImageModel
+@{
+	Layout = "_AdminLayout";
+
+}
+
+<h2 class="text-center mb-5">Add Image to Tour Package Gallery</h2>
+<form method="post" class="container" enctype="multipart/form-data">
+    <input type="number" asp-for="Id" class="form-control" value="@ViewData["TourId"]" hidden/>
+    <div class="mb-5">
+        <label asp-for="Images" class="control-label mb-3">Select Image</label>
+        <input type="file" asp-for="Images" class="form-control" id="images" accept="image/*" multiple />
+        <span asp-validation-for="Images" class="text-danger"></span>
+        <ul id="fileNames"></ul>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Images</button>
+    <a class="btn btn-primary" asp-controller="Tour" asp-action="EditGallery" asp-route-id="@ViewData["TourId"]">Cancel</a>
+</form>
+
+<script>
+    document.getElementById('images').addEventListener('change', function () {
+        const fileNamesList = document.getElementById('fileNames');
+        fileNamesList.innerHTML = ""; // Clear existing list
+
+        // Loop through selected files
+        Array.from(this.files).forEach(file => {
+            const listItem = document.createElement("li");
+            listItem.textContent = file.name; // Add file name
+            fileNamesList.appendChild(listItem); // Append to list
+        });
+    });
+</script>
+

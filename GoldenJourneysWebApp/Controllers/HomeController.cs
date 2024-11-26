@@ -21,7 +21,8 @@ namespace GoldenJourneysWebApp.Controllers
 
 
         //Home Page (Not Login)
-		public IActionResult Index()
+        [HttpGet]
+        public IActionResult Index()
         {
             return View();
         }
@@ -29,6 +30,7 @@ namespace GoldenJourneysWebApp.Controllers
 
         //Home Page (Login)
         [Authorize(Roles = "Customer")]
+        [HttpGet]
         public IActionResult LoginHome()
         {
             return View();
@@ -37,6 +39,7 @@ namespace GoldenJourneysWebApp.Controllers
 
         //Privacy Page
         [Authorize(Roles = "Customer")]
+        [HttpGet]
         public IActionResult Privacy()
         {
             return View();
@@ -44,6 +47,7 @@ namespace GoldenJourneysWebApp.Controllers
 
 
         //Register Customer
+        [HttpGet]
         public IActionResult RegisterCustomer()
 		{
 			return View();
@@ -64,8 +68,8 @@ namespace GoldenJourneysWebApp.Controllers
 			}
 			return View(customer);
 		}
-
-		public IActionResult RegisterSuccess(string userEmail)
+        [HttpGet]
+        public IActionResult RegisterSuccess(string userEmail)
 		{
 			var user = _userService.GetUserByEmail(userEmail);
 			return View(user);
@@ -73,7 +77,8 @@ namespace GoldenJourneysWebApp.Controllers
 
 
         //Login
-		public IActionResult Login()
+        [HttpGet]
+        public IActionResult Login()
 		{
 			return View();
 		}
@@ -126,6 +131,7 @@ namespace GoldenJourneysWebApp.Controllers
 
 
         //Access Denied
+        [HttpGet]
         public IActionResult AccessDenied()
         {
             return View();
@@ -142,6 +148,7 @@ namespace GoldenJourneysWebApp.Controllers
 
         //Customer Profile
         [Authorize(Roles = "Customer")]
+        [HttpGet]
         public IActionResult CustomerProfile()
         {
             var user = _userService.GetProfileByEmail(HttpContext.User.Identity.Name);
@@ -151,6 +158,7 @@ namespace GoldenJourneysWebApp.Controllers
 
         //Update Profile Details
         [Authorize(Roles = "Customer")]
+        [HttpGet]
         public IActionResult UpdateProfile(string email)
         {
             var user = _userService.GetProfileByEmail(email);
@@ -171,6 +179,7 @@ namespace GoldenJourneysWebApp.Controllers
 
 
         //Reset Password
+        [HttpGet]
         public IActionResult ResetPassword(string email)
         {
             var user = _userService.GetUserForPasswordReset(email);

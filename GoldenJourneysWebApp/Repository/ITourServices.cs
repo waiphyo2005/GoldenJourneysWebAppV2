@@ -13,5 +13,10 @@ namespace GoldenJourneysWebApp.Repository
         TourViewModel GetTourAllDetails(int Id);
         TourDetailEditViewModel GetTourDetails(int Id);
         void UploadTourDetails(TourDetailEditViewModel tour);
+        List<TourGalleryModel> GetTourGallery(int Id);
+        TourGalleryModel GetImage(int Id);
+        void RemoveImage(int id);
+        void AddTourImages(AddImageModel image);
+
     }
 }

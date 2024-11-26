@@ -91,6 +91,7 @@ namespace GoldenJourneysWebApp.Repository
 					Address = x.Address,
 					Type = x.UserType.Type,
 					CreatedAt = x.CreatedAt,
+                    Status = x.Status,
 				}).SingleOrDefault();
             return user;
         }
