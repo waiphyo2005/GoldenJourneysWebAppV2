@@ -262,5 +262,37 @@ namespace GoldenJourneysWebApp.Repository
                 _context.SaveChanges();
             }
         }
+
+        public EditAvailabilityViewModel GetAvailableSlot(int id)
+        {
+            var slot = _context.TourAvailability.Where(s => s.Id == id)
+                .Select(a => new EditAvailabilityViewModel
+                {
+                    Id = a.Id,
+                    TourId = a.TourId,
+                    Date = a.AvailableDate,
+                    OriginalCapacity = a.OriginalCapacity,
+                    AvailableCapacity = a.AvailableCapacity,
+                }).FirstOrDefault();
+            return slot;
+        }
+        public void EditCapacity(EditAvailabilityViewModel slot)
+        {
+            var existingSlot = _context.TourAvailability.FirstOrDefault(s => s.Id == slot.Id);
+            if(slot.Action == "Add")
+            {
+                existingSlot.OriginalCapacity += slot.ActionCapacity;
+                existingSlot.AvailableCapacity += slot.ActionCapacity;
+                _context.TourAvailability.Update(existingSlot);
+                _context.SaveChanges();
+            }
+            if (slot.Action == "Deduct")
+            {
+                existingSlot.OriginalCapacity -= slot.ActionCapacity;
+                existingSlot.AvailableCapacity -= slot.ActionCapacity;
+                _context.TourAvailability.Update(existingSlot);
+                _context.SaveChanges();
+            }
+        }
     }
 }

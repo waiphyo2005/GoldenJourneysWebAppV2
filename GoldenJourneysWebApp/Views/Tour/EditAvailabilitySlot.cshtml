@@ -1,0 +1,45 @@
+﻿@model EditAvailabilityViewModel
+@{
+	Layout = "_AdminLayout";
+}
+<h2 class="text-center mb-5">Edit Availability Slot of Tour Package ID:@Model.TourId</h2>
+<form method="post" class="container">
+
+    <label class="form-label" asp-for="Id"></label>
+    <input type="number" asp-for="Id" class="form-control mb-3" readonly/>
+    <input type="number" asp-for="Id" class="form-control mb-3" hidden />
+
+    <input type="number" asp-for="TourId" class="form-control mb-3" hidden />
+
+    <label class="form-label" asp-for="OriginalCapacity"></label>
+    <input type="number" asp-for="OriginalCapacity" class="form-control mb-3" readonly />
+    <input type="number" asp-for="OriginalCapacity" class="form-control mb-3" hidden />
+
+    <label class="form-label" asp-for="AvailableCapacity"></label>
+    <input type="number" asp-for="AvailableCapacity" class="form-control mb-3" readonly />
+    <input type="number" asp-for="AvailableCapacity" class="form-control mb-3" hidden />
+
+    <label class="form-label" asp-for="Date"></label>
+    <input type="date" asp-for="Date" class="form-control mb-5" readonly />
+    <input type="date" asp-for="Date" class="form-control mb-3" hidden />
+
+    <h4 class="mb-5">Please Select the Action you want to perfrom for this Available Slot</h4>
+    <div class="mb-3">
+        <label asp-for="Action" class="form-label"></label>
+        <select asp-for="Action" class="form-select" required>
+            <option value="" selected disabled>Select Action</option>
+            <option value="Add">Add Capacity</option>
+            <option value="Deduct">Deduct Capacity</option>
+        </select>
+        <span asp-validation-for="Action" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ActionCapacity" class="form-label"></label>
+        <input type="number" asp-for="ActionCapacity" class="form-control" />
+        <span asp-validation-for="ActionCapacity" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add</button>
+    <a class="btn btn-primary" asp-controller="Tour" asp-action="ViewAvailabilitySlots" asp-route-tourId="@Model.TourId">Cancel</a>
+</form>

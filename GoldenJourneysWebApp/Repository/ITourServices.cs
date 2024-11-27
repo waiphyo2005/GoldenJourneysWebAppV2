@@ -21,6 +21,8 @@ namespace GoldenJourneysWebApp.Repository
         List<TourAvailability> GetAvailabilitySlots(int tourId);
         bool CheckDuplicateDate(AddAvailabilityViewModel slot);
         void AddAvailableSlot(AddAvailabilityViewModel slot);
+        EditAvailabilityViewModel GetAvailableSlot(int id);
+        void EditCapacity(EditAvailabilityViewModel slot);
 
     }
 }

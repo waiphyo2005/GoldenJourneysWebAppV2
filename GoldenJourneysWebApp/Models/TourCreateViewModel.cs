@@ -16,7 +16,8 @@ namespace GoldenJourneysWebApp.Models
         [Required(ErrorMessage = "Price per Customer is required.")]
         public double Price { get; set; }
         public string? Description { get; set; }
-		public List<IFormFile>? Images { get; set; }
+        [Required(ErrorMessage = "At least one image is required.")]
+        public List<IFormFile> Images { get; set; }
         [Required(ErrorMessage = "Date Range is required.")]
         public DateOnly StartDate { get; set; }
         [Required(ErrorMessage = "Date Range is required.")]

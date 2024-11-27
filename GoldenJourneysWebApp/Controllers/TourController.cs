@@ -59,8 +59,7 @@ namespace GoldenJourneysWebApp.Controllers
                 ModelState.AddModelError("StartDate", "Start Date must be earlier than the End Date.");
                 ModelState.AddModelError("EndDate", "End Date must be later than the Start Date.");
             }
-
-            if (tour.Images != null)
+            if(tour.Images != null)
             {
                 string pattern = @"\.(jpg|jpeg|png|gif|bmp)$";
                 Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
@@ -77,11 +76,7 @@ namespace GoldenJourneysWebApp.Controllers
             if (ModelState.IsValid)
             {
                 _tourService.UploadTourDetails(tour);
-
-                if (tour.Images != null)
-                {
-                    _tourService.UploadTourImages(tour);
-                }
+                _tourService.UploadTourImages(tour);
                 _tourService.UploadAvailabilitySlots(tour);
 
                 TempData["Message"] = "Tour Package has been successfully created!";
@@ -133,6 +128,8 @@ namespace GoldenJourneysWebApp.Controllers
             }
             return View(tourGallery);
         }
+
+        //Delete Image
         [HttpGet]
         public IActionResult SelectDeleteImage(int id)
         {
@@ -145,6 +142,8 @@ namespace GoldenJourneysWebApp.Controllers
             TempData["Message"] = "Image has been successfully removed!";
             return RedirectToAction("EditGallery", "Tour", new { id = tourId });
         }
+
+        //Add Image
         [HttpGet]
         public ActionResult AddImages(int id)
         {
@@ -177,6 +176,8 @@ namespace GoldenJourneysWebApp.Controllers
             return View(image);
         }
 
+
+        //Edit Tour Availability Slots
         [HttpGet]
         public IActionResult ViewAvailabilitySlots(int tourId)
         {
@@ -187,6 +188,8 @@ namespace GoldenJourneysWebApp.Controllers
             }
             return RedirectToAction("AddAvailabilitySlot", "Tour", new { tourId = tourId });
         }
+
+        //Add Availability Slots
         [HttpGet]
         public IActionResult AddAvailabilitySlot(int tourId)
         {
@@ -218,6 +221,36 @@ namespace GoldenJourneysWebApp.Controllers
                 _tourService.AddAvailableSlot(slot);
                 TempData["Message"] = "New Slot has been successfully added!";
                 return RedirectToAction("ViewAvailabilitySlots", "Tour", new { tourId = slot.tourId });
+            }
+            return View(slot);
+        }
+
+        //Edit Availability Slots
+        [HttpGet]
+        public IActionResult EditAvailabilitySlot(int id)
+        {
+            var slot = _tourService.GetAvailableSlot(id);
+            return View(slot);
+        }
+        [HttpPost]
+        public IActionResult EditAvailabilitySlot(EditAvailabilityViewModel slot)
+        {
+            if(slot.Action == null)
+            {
+                ModelState.AddModelError("Action", "Please select the action.");
+            }
+            if (slot.Action == "Deduct")
+            {
+                if (slot.ActionCapacity > slot.AvailableCapacity)
+                {
+                    ModelState.AddModelError("ActionCapacity", "Not Enough Available Capacity to Deduct!");
+                }
+            }
+            if (ModelState.IsValid)
+            {
+                _tourService.EditCapacity(slot);
+                TempData["Message"] = "Slot has been successfully updated!";
+                return RedirectToAction("ViewAvailabilitySlots", "Tour", new { tourId = slot.TourId });
             }
             return View(slot);
         }
