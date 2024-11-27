@@ -48,9 +48,9 @@
 				<td>@tour.Price</td>
 				<td>@tour.Status</td>
 				<td>@tour.Created</td>
-				@* <td>
-			<a class="btn btn-primary" asp-controller="Admin" asp-action="EditUser" asp-route-email="@user.Email">Edit</a>
-			</td> *@
+				<td>
+					<a class="btn btn-primary" asp-controller="Tour" asp-action="ViewDetails" asp-route-id="@tour.Id">Details</a>
+				</td>
 			</tr>
 			counter++;
 		}

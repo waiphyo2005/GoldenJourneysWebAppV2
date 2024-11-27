@@ -4,6 +4,7 @@ using GoldenJourneysWebApp.Models;
 using GoldenJourneysWebApp.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace GoldenJourneysWebApp.Controllers
 {
@@ -151,7 +152,7 @@ namespace GoldenJourneysWebApp.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult AddImages(AddImageModel image)
+        public IActionResult AddImages(AddImageViewModel image)
         {
             ViewData["TourId"] = image.Id;
             if (image.Images != null)
@@ -174,7 +175,51 @@ namespace GoldenJourneysWebApp.Controllers
                 return RedirectToAction("EditGallery", "Tour", new { id = image.Id });
             }
             return View(image);
-            
+        }
+
+        [HttpGet]
+        public IActionResult ViewAvailabilitySlots(int tourId)
+        {
+            var tourSlots = _tourService.GetAvailabilitySlots(tourId);
+            if (tourSlots != null)
+            {
+                return View(tourSlots);
+            }
+            return RedirectToAction("AddAvailabilitySlot", "Tour", new { tourId = tourId });
+        }
+        [HttpGet]
+        public IActionResult AddAvailabilitySlot(int tourId)
+        {
+            ViewData["tourId"]=tourId;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddAvailabilitySlot(AddAvailabilityViewModel slot)
+        {
+            ViewData["tourId"] = slot.tourId;
+            if (slot.StartDate >= slot.EndDate)
+            {
+                ModelState.AddModelError("StartDate", "Start Date must be earlier than the End Date.");
+                ModelState.AddModelError("EndDate", "End Date must be later than the Start Date.");
+            }
+            if(slot.StartDate <= DateOnly.FromDateTime(DateTime.Now))
+            {
+                ModelState.AddModelError("StartDate", "Invalid Start Date! The date must not be prior than today.");
+            }
+            var isDateExist = _tourService.CheckDuplicateDate(slot);
+            if (isDateExist)
+            {
+                ModelState.AddModelError("StartDate", "Selected date or dates already exist. Cannot create new slot.");
+                ModelState.AddModelError("StartDate", "Selected date or dates already exist. Cannot create new slot.");
+            }
+            if (ModelState.IsValid)
+            {
+                _tourService.AddAvailableSlot(slot);
+                TempData["Message"] = "New Slot has been successfully added!";
+                return RedirectToAction("ViewAvailabilitySlots", "Tour", new { tourId = slot.tourId });
+            }
+            return View(slot);
         }
     }
 }

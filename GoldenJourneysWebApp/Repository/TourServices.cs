@@ -209,7 +209,7 @@ namespace GoldenJourneysWebApp.Repository
             _context.SaveChanges();
         }
 
-        public void AddTourImages(AddImageModel image)
+        public void AddTourImages(AddImageViewModel image)
         {
             foreach (var pic in image.Images)
             {
@@ -221,6 +221,44 @@ namespace GoldenJourneysWebApp.Repository
                     MediaPathURL = url,
                 };
                 _context.ToursMediaContents.Add(newTourMedia);
+                _context.SaveChanges();
+            }
+        }
+        public List<TourAvailability> GetAvailabilitySlots(int tourId)
+        {
+            var slots = _context.TourAvailability.Where(a => a.TourId == tourId).ToList();
+            if (slots.Count > 0)
+            {
+                return slots;
+            }
+            return null;
+        }
+        public bool CheckDuplicateDate(AddAvailabilityViewModel slot)
+        {
+            var avaliableDates = CreateDateList(slot.StartDate, slot.EndDate);
+            foreach (var date in avaliableDates)
+            {
+                var isUsedDate = _context.TourAvailability.Any(a => a.TourId == slot.tourId && a.AvailableDate == date);
+                if (isUsedDate)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public void AddAvailableSlot(AddAvailabilityViewModel slot)
+        {
+            var avaliableDates = CreateDateList(slot.StartDate, slot.EndDate);
+            foreach (var date in avaliableDates)
+            {
+                var newSlot = new TourAvailability
+                {
+                    TourId = slot.tourId,
+                    OriginalCapacity = slot.Capacity,
+                    AvailableCapacity = slot.Capacity,
+                    AvailableDate = date,
+                };
+                _context.TourAvailability.Add(newSlot);
                 _context.SaveChanges();
             }
         }

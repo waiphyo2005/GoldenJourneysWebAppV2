@@ -2,7 +2,7 @@
 
 namespace GoldenJourneysWebApp.Models
 {
-	public class AddImageModel
+	public class AddImageViewModel
 	{
 		public int Id { get; set; }
 

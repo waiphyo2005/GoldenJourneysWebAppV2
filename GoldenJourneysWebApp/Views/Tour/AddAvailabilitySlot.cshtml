@@ -1,0 +1,31 @@
+﻿@model AddAvailabilityViewModel
+@{
+	Layout = "_AdminLayout";
+}
+<h2 class="text-center mb-5">Add Tour Package Available Slot</h2>
+<form method="post" class="container">
+
+    <input type="number" asp-for="tourId" value="@ViewData["tourId"]" class="form-control" hidden/>
+
+    <h4 class="mb-5">Please Select the Date Range and Capacity of each date that will be avaliable.</h4>
+    <div class="mb-3">
+        <label asp-for="StartDate" class="form-label"></label>
+        <input type="date" asp-for="StartDate" class="form-control" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="EndDate" class="form-label"></label>
+        <input type="date" asp-for="EndDate" class="form-control" />
+        <span asp-validation-for="EndDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Capacity" class="form-label"></label>
+        <input type="number" asp-for="Capacity" class="form-control" min="1" />
+        <span asp-validation-for="Capacity" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add</button>
+    <a class="btn btn-primary" asp-controller="Tour" asp-action="ViewDetails" asp-route-id="@ViewData["tourId"]">Cancel</a>
+</form>

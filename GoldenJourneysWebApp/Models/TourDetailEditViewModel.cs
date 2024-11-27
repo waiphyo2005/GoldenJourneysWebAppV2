@@ -4,7 +4,8 @@ namespace GoldenJourneysWebApp.Models
 {
     public class TourDetailEditViewModel
     {
-        public int Id { get; set; }
+		[Display(Name = "Package Id")]
+		public int Id { get; set; }
         [Display(Name = "Tour Package Name")]
         [Required(ErrorMessage = "Package Name is required.")]
         public string Name { get; set; }

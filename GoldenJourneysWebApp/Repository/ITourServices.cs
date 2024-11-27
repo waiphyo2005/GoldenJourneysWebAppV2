@@ -1,4 +1,5 @@
-﻿using GoldenJourneysWebApp.Models;
+﻿using GoldenJourneysWebApp.Data.Entities;
+using GoldenJourneysWebApp.Models;
 
 namespace GoldenJourneysWebApp.Repository
 {
@@ -16,7 +17,10 @@ namespace GoldenJourneysWebApp.Repository
         List<TourGalleryModel> GetTourGallery(int Id);
         TourGalleryModel GetImage(int Id);
         void RemoveImage(int id);
-        void AddTourImages(AddImageModel image);
+        void AddTourImages(AddImageViewModel image);
+        List<TourAvailability> GetAvailabilitySlots(int tourId);
+        bool CheckDuplicateDate(AddAvailabilityViewModel slot);
+        void AddAvailableSlot(AddAvailabilityViewModel slot);
 
     }
 }

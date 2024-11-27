@@ -49,7 +49,7 @@ namespace GoldenJourneysWebApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("BookingHotels");
+                    b.ToTable("BookingHotels", (string)null);
                 });
 
             modelBuilder.Entity("GoldenJourneysWebApp.Data.Entities.BookingTour", b =>
@@ -87,7 +87,7 @@ namespace GoldenJourneysWebApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("BookingTours");
+                    b.ToTable("BookingTours", (string)null);
                 });
 
             modelBuilder.Entity("GoldenJourneysWebApp.Data.Entities.Hotels", b =>
@@ -120,7 +120,7 @@ namespace GoldenJourneysWebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Hotels");
+                    b.ToTable("Hotels", (string)null);
                 });
 
             modelBuilder.Entity("GoldenJourneysWebApp.Data.Entities.RoomAvailability", b =>
@@ -144,7 +144,7 @@ namespace GoldenJourneysWebApp.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("RoomsAvailability");
+                    b.ToTable("RoomsAvailability", (string)null);
                 });
 
             modelBuilder.Entity("GoldenJourneysWebApp.Data.Entities.RoomBook", b =>
@@ -167,7 +167,7 @@ namespace GoldenJourneysWebApp.Migrations
 
                     b.HasIndex("RoomAvailabilityId");
 
-                    b.ToTable("BookingBook");
+                    b.ToTable("BookingBook", (string)null);
                 });
 
             modelBuilder.Entity("GoldenJourneysWebApp.Data.Entities.RoomMediaContent", b =>
@@ -193,7 +193,7 @@ namespace GoldenJourneysWebApp.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("RoomsMediaContents");
+                    b.ToTable("RoomsMediaContents", (string)null);
                 });
 
             modelBuilder.Entity("GoldenJourneysWebApp.Data.Entities.Rooms", b =>
@@ -224,7 +224,7 @@ namespace GoldenJourneysWebApp.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Rooms");
+                    b.ToTable("Rooms", (string)null);
                 });
 
             modelBuilder.Entity("GoldenJourneysWebApp.Data.Entities.TourAvailability", b =>
@@ -251,7 +251,7 @@ namespace GoldenJourneysWebApp.Migrations
 
                     b.HasIndex("TourId");
 
-                    b.ToTable("TourAvailability");
+                    b.ToTable("TourAvailability", (string)null);
                 });
 
             modelBuilder.Entity("GoldenJourneysWebApp.Data.Entities.Tours", b =>
@@ -292,7 +292,7 @@ namespace GoldenJourneysWebApp.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Tours");
+                    b.ToTable("Tours", (string)null);
                 });
 
             modelBuilder.Entity("GoldenJourneysWebApp.Data.Entities.ToursMediaContent", b =>
@@ -318,7 +318,7 @@ namespace GoldenJourneysWebApp.Migrations
 
                     b.HasIndex("TourId");
 
-                    b.ToTable("ToursMediaContents");
+                    b.ToTable("ToursMediaContents", (string)null);
                 });
 
             modelBuilder.Entity("GoldenJourneysWebApp.Data.Entities.User", b =>
@@ -364,7 +364,7 @@ namespace GoldenJourneysWebApp.Migrations
 
                     b.HasIndex("UserTypeId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("GoldenJourneysWebApp.Data.Entities.UserType", b =>
@@ -381,7 +381,7 @@ namespace GoldenJourneysWebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserTypes");
+                    b.ToTable("UserTypes", (string)null);
                 });
 
             modelBuilder.Entity("GoldenJourneysWebApp.Data.Entities.BookingHotel", b =>
