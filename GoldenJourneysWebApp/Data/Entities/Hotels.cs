@@ -13,9 +13,13 @@ namespace GoldenJourneysWebApp.Data.Entities
         [Required]
         public int Stars { get; set; }
         [Required]
-        public int Location { get; set; }
+        public string Location { get; set; }
         public string? Description { get; set; }
         public string? ThumbnailImageURL { get; set; }
+        [Required]
+        public DateOnly Created {  get; set; }
+        [Required]
+        public string Status { get; set; }
         public ICollection<Rooms> Rooms { get; set; }
     }
 }

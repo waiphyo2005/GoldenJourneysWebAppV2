@@ -1,6 +1,6 @@
 ﻿namespace GoldenJourneysWebApp.Models
 {
-    public class TourGalleryModel
+    public class TourGalleryViewModel
     {
         public int Id { get; set; }
         public int TourId { get; set; }

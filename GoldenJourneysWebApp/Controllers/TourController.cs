@@ -88,6 +88,7 @@ namespace GoldenJourneysWebApp.Controllers
 
 
         //View Tour Details
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult ViewDetails(int id)
         {
@@ -97,6 +98,7 @@ namespace GoldenJourneysWebApp.Controllers
 
 
         //Edit Tour Details (Name, location, etc..)
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult EditTourDetails(int id)
         {
@@ -118,18 +120,16 @@ namespace GoldenJourneysWebApp.Controllers
 
 
         //Edit Tour Details (Gallery)
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult EditGallery(int id)
         {
             var tourGallery = _tourService.GetTourGallery(id);
-            if(tourGallery == null)
-            {
-                return RedirectToAction("AddImages", "Tour", new { id = id });
-            }
             return View(tourGallery);
         }
 
         //Delete Image
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult SelectDeleteImage(int id)
         {
@@ -144,6 +144,7 @@ namespace GoldenJourneysWebApp.Controllers
         }
 
         //Add Image
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public ActionResult AddImages(int id)
         {
@@ -167,6 +168,10 @@ namespace GoldenJourneysWebApp.Controllers
                     }
                 }
             }
+            if (image.Images == null)
+            {
+                ModelState.AddModelError("Images", $"Please Select an Image.");
+            }
             if (ModelState.IsValid)
             {
                 _tourService.AddTourImages(image);
@@ -178,6 +183,7 @@ namespace GoldenJourneysWebApp.Controllers
 
 
         //Edit Tour Availability Slots
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult ViewAvailabilitySlots(int tourId)
         {
@@ -190,6 +196,7 @@ namespace GoldenJourneysWebApp.Controllers
         }
 
         //Add Availability Slots
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult AddAvailabilitySlot(int tourId)
         {
@@ -226,6 +233,7 @@ namespace GoldenJourneysWebApp.Controllers
         }
 
         //Edit Availability Slots
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult EditAvailabilitySlot(int id)
         {

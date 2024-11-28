@@ -1,0 +1,61 @@
+﻿@model List<HotelViewModel>
+@{
+	Layout = "_AdminLayout";
+}
+<div class="container mt-5">
+	<h2 class="text-center mb-5">List of Hotels</h2>
+	<div class="text-center mb-4">
+		<a class="btn btn-primary" asp-controller="Hotel" asp-action="CreateHotel">Create New Tour Package</a>
+	</div>
+	<h4 class="text-success text-center mb-5">@TempData["Message"]</h4>
+	<div class="form-group">
+		<a class="btn btn-primary" asp-controller="Hotel" asp-action="Index">All</a>
+		<a class="btn btn-primary" asp-controller="Hotel" asp-action="FilterHotels" asp-route-Status="Active">Active</a>
+		<a class="btn btn-primary" asp-controller="Hotel" asp-action="FilterHotels" asp-route-Status="Disabled">Disabled</a>
+	</div>
+
+
+</div>
+<table class="table mt-4">
+	<thead>
+		<tr>
+			<th>No.</th>
+			<th>Name</th>
+			<th>Id</th>
+			<th>Type</th>
+			<th>Location</th>
+			<th>Stars</th>
+			<th>Tour Status</th>
+			<th>Created At</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		@{
+			int counter = 1;
+		}
+		@foreach (var hotel in Model)
+		{
+			<tr>
+				<td>@counter</td>
+				<td>@hotel.Name</td>
+				<td>@hotel.Id</td>
+				<td>@hotel.Type</td>
+				<td>@hotel.Location</td>
+				<td>
+					@for (int i = 0; i < hotel.Stars; i++)
+					{
+						@("☆")
+						;
+					}
+				</td>
+				<td>@hotel.Status</td>
+				<td>@hotel.Created</td>
+				<td>
+					<a class="btn btn-primary" asp-controller="" asp-action="" asp-route-id="@hotel.Id">Details</a>
+				</td>
+			</tr>
+			counter++;
+		}
+	</tbody>
+</table>

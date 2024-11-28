@@ -31,12 +31,6 @@ namespace GoldenJourneysWebApp.Data
             modelBuilder.Entity<Tours>()
                 .HasIndex(t => t.Name)
                 .IsUnique();
-            modelBuilder.Entity<TourAvailability>()
-                .HasIndex(a => a.AvailableDate)
-                .IsUnique();
-			modelBuilder.Entity<RoomAvailability>()
-				.HasIndex(r => r.AvailableDate)
-				.IsUnique();
 		}
     }
 }

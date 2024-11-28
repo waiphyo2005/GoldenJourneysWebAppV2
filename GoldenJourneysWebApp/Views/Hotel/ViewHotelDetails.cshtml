@@ -1,0 +1,59 @@
+﻿@model HotelDetailViewModel
+@{
+	Layout = "_AdminLayout";
+}
+<h2 class="text-center mb-5">@Model.Name</h2>
+@* <h4 class="text-success text-center mb-5">@TempData["Message"]</h4> *@
+
+
+@* <a class="btn btn-primary mb-3" asp-controller="Tour" asp-action="EditTourDetails" asp-route-Id="@Model.Id">Edit Details</a> *@
+
+<div class="container mb-5">
+    <div class="mb-5 text-center">
+        <img src="~/HotelImages/@Model.ThumbnailURL" class="img-fluid mb-3" style="width: 400px; height: 300px;" alt="@Model.ThumbnailURL">
+    </div>
+    <h4 class="mb-4">Hotel Details</h4>
+    <div class="mb-3">
+        <span><strong>Hotel Id:</strong> @Model.Id</span>
+    </div>
+    <div class="mb-3">
+        <span><strong>Hotel Name:</strong> @Model.Name</span>
+    </div>
+    <div class="mb-3">
+        <span><strong>Type:</strong> @Model.Type</span>
+    </div>
+    <div class="mb-3">
+        <span><strong>Location:</strong> @Model.Location</span>
+    </div>
+    <div class="mb-3">
+        <span><strong>Hotel Rating:</strong> 
+            @for(int i = 0; i<Model.Stars; i++)
+            {
+                @("☆");
+            }
+        </span>
+    </div>
+    <div class="mb-3">
+        <span><strong>Description:</strong> 
+            <textarea class="form-control">
+                @if (Model.Description != null)
+                {
+                    @Model.Description
+                    ;
+                }
+                else
+                {
+                    @("No Description Provided")
+                    ;
+                }
+            </textarea>
+        </span>
+    </div>
+    <div class="mb-3">
+        <span><strong>Created:</strong> @Model.Created.ToString("yyyy-MM-dd")</span>
+    </div>
+    <div class="mb-5">
+        <span><strong>Status:</strong> @Model.Status</span>
+    </div>
+    <a class="btn btn-primary" asp-controller="Hotel" asp-action="Index">Go Back</a>
+</div>

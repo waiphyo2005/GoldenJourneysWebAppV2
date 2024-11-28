@@ -1,0 +1,52 @@
+﻿@model CreateHotelViewModel
+@{
+    Layout = "_AdminLayout";
+    string star = "";
+}
+<h2 class="text-center mb-5">Create New Hotel</h2>
+
+<form method="post" class="container" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input type="text" asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Type" class="form-label"></label>
+        <input type="text" asp-for="Type" class="form-control" />
+        <span asp-validation-for="Type" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Stars" class="form-label"></label>
+        <select asp-for="Stars" class="form-select" required>
+            <option value="" selected disabled>Select the Rating for Hotel</option>
+            @for(int i = 1; i <= 5; i++)
+            {
+                star += "☆";
+                <option value="@i">@star</option>
+            }
+        </select>
+        <span asp-validation-for="Stars" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Location" class="form-label"></label>
+        <input type="text" asp-for="Location" class="form-control" />
+        <span asp-validation-for="Location" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-5">
+        <label asp-for="ThumbnailImage" class="control-label mb-3"></label>
+        <input type="file" asp-for="ThumbnailImage" class="form-control" accept="image/*"/>
+        <span asp-validation-for="ThumbnailImage" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Hotel</button>
+    <a class="btn btn-primary" asp-controller="Hotel" asp-action="Index">Cancel</a>
+</form>

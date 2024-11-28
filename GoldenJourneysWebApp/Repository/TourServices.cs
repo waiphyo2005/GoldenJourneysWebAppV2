@@ -139,7 +139,7 @@ namespace GoldenJourneysWebApp.Repository
                     Status = x.Status,
                     Created = x.Created,
                     ImageURLs = x.ToursMediaContent.ToList(),
-                    AvalibleSlots = x.TourAvailability.ToList(),
+                    AvalibleSlots = x.TourAvailability.OrderBy(a => a.AvailableDate).ToList(),
                 }).SingleOrDefault();
             return tour;
         }
@@ -172,27 +172,28 @@ namespace GoldenJourneysWebApp.Repository
                 _context.SaveChanges();
             }
         }
-        public List<TourGalleryModel> GetTourGallery(int Id)
+        public GalleryViewModel GetTourGallery(int Id)
         {
-            var gallery = _context.ToursMediaContents.Where(t => t.TourId == Id)
-                .Select(x => new TourGalleryModel
+            var images = _context.ToursMediaContents.Where(t => t.TourId == Id)
+                .Select(x => new TourGalleryViewModel
                 {
                     Id = x.Id,
                     TourId = x.TourId,
                     Title = x.Title,
                     MediaUrl = x.MediaPathURL,
                 }).ToList();
-            if (gallery.Count > 0)
+            var gallery = new GalleryViewModel
             {
-                return gallery;
-            }
-            return null;
+                tourId = Id,
+                Images = images,
+            };
+            return gallery;
         }
 
-        public TourGalleryModel GetImage(int Id)
+        public TourGalleryViewModel GetImage(int Id)
         {
             var image = _context.ToursMediaContents.Where(t => t.Id == Id)
-               .Select(x => new TourGalleryModel
+               .Select(x => new TourGalleryViewModel
                {
                    Id = x.Id,
                    TourId = x.TourId,
@@ -226,7 +227,7 @@ namespace GoldenJourneysWebApp.Repository
         }
         public List<TourAvailability> GetAvailabilitySlots(int tourId)
         {
-            var slots = _context.TourAvailability.Where(a => a.TourId == tourId).ToList();
+            var slots = _context.TourAvailability.Where(a => a.TourId == tourId).OrderBy(a => a.AvailableDate).ToList();
             if (slots.Count > 0)
             {
                 return slots;

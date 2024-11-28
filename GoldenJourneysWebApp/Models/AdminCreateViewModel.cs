@@ -16,6 +16,9 @@ namespace GoldenJourneysWebApp.Models
 
         [Required(ErrorMessage = "Password is required.")]
         public string Password { get; set; }
+        [Required(ErrorMessage = "Password is required.")]
+        [Display(Name = "Confirm Password")]
+        public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessage = "Phone Number is required.")]
         [RegularExpression(@"^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$", ErrorMessage = "Invalid Phone Number Input!")]

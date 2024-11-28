@@ -1,4 +1,4 @@
-﻿@model List<TourGalleryModel>
+﻿@model GalleryViewModel
 @{
     Layout = "_AdminLayout";
 }
@@ -7,9 +7,9 @@
 <h4 class="text-success text-center mb-5">@TempData["Message"]</h4>
 <div class="container mt-4 mb-3">
     <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
-        @if (Model.Count() != 0)
+        @if (Model.Images.Count() != 0)
         {
-            @foreach (var imageUrl in Model)
+            @foreach (var imageUrl in Model.Images)
             {
                 <div class="col">
                     <div class="card position-relative">
@@ -26,8 +26,8 @@
     </div>
 
     <div class="d-flex justify-content-center align-items-center mb-3" style="height: 200px;">
-        <a class="btn btn-success" asp-controller="Tour" asp-action="AddImages" asp-route-id="@Model.FirstOrDefault().TourId">Add New Images</a>
+        <a class="btn btn-success" asp-controller="Tour" asp-action="AddImages" asp-route-id="@Model.tourId">Add New Images</a>
     </div>
 
-    <a class="btn btn-primary" asp-controller="Tour" asp-action="ViewDetails" asp-route-Id="@Model.FirstOrDefault().TourId">Go Back</a>
+    <a class="btn btn-primary" asp-controller="Tour" asp-action="ViewDetails" asp-route-Id="@Model.tourId">Go Back</a>
 </div>

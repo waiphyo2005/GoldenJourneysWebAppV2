@@ -56,6 +56,10 @@ namespace GoldenJourneysWebApp.Controllers
 		[HttpPost]
 		public IActionResult RegisterCustomer(CustomerRegistrationViewModel customer)
 		{
+            if(customer.Password != customer.ConfirmPassword)
+            {
+                ModelState.AddModelError("ConfirmPassword", "Two Passwords doesn't match.");
+            }
 			if (ModelState.IsValid)
 			{
 				bool usedEmail = _userService.IsEmailUnique(customer.Email);
@@ -188,14 +192,18 @@ namespace GoldenJourneysWebApp.Controllers
         [HttpPost]
         public IActionResult ResetPassword(string email, ResetPasswordViewModel user)
 		{
-			if (!ModelState.IsValid)
+            if (user.Password != user.ConfirmPassword)
+            {
+                ModelState.AddModelError("ConfirmPassword", "Two Passwords doesn't match.");
+            }
+			if (ModelState.IsValid)
 			{
-				return View(user);
+                _userService.UpdatePassword(email, user);
+                TempData["Message"] = "Password has been Updated!";
+                return RedirectToAction("CustomerProfile", "Home");
 			}
-			_userService.UpdatePassword(email, user);
-			TempData["Message"] = "Password has been Updated!";
-			return RedirectToAction("CustomerProfile", "Home");
-		}
+            return View(user);
+        }
 
 
 

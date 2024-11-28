@@ -45,6 +45,10 @@ namespace GoldenJourneysWebApp.Controllers
         [HttpPost]
         public IActionResult CreateAdmin(AdminCreateViewModel admin) 
         {
+            if(admin.Password != admin.ConfirmPassword)
+            {
+                ModelState.AddModelError("ConfirmPassword", "Two Passwords doesn't match!");
+            }
             if (ModelState.IsValid)
             {
                 bool usedEmail = _userService.IsEmailUnique(admin.Email);
@@ -98,6 +102,7 @@ namespace GoldenJourneysWebApp.Controllers
 
 
         //Reset Password
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult AdminResetPassword(string email)
         {
@@ -107,13 +112,17 @@ namespace GoldenJourneysWebApp.Controllers
         [HttpPost]
         public IActionResult AdminResetPassword(string email, ResetPasswordViewModel user)
         {
-            if (!ModelState.IsValid)
+            if (user.Password != user.ConfirmPassword)
             {
-                return View(user);
+                ModelState.AddModelError("ConfirmPassword", "Two Passwords doesn't match!");
             }
-            _userService.UpdatePassword(email, user);
-            TempData["Message"] = "Password has been Updated!";
-            return RedirectToAction("AdminProfile", "Admin");
+            if (ModelState.IsValid)
+            {
+                _userService.UpdatePassword(email, user);
+                TempData["Message"] = "Password has been Updated!";
+                return RedirectToAction("AdminProfile", "Admin");
+            }
+            return View(user);
         }
 
     }
