@@ -18,6 +18,7 @@ namespace GoldenJourneysWebApp.Data.Entities
         public int HotelId { get; set; }
         [ForeignKey("HotelId")]
         public Hotels Hotels { get; set; }
+        public DateOnly Created { get; set; }
         public ICollection<RoomMediaContent> RoomMediaContent { get; set; }
         public ICollection<RoomAvailability> RoomAvailability { get; set; }
     }

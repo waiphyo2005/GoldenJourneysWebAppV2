@@ -1,0 +1,48 @@
+﻿@model HotelRoomsViewModel
+@{
+    Layout = "_AdminLayout";
+}
+<h4 class="mb-4 text-center">@Model.HotelName Rooms</h4>
+<a class="btn btn-primary mb-3" asp-controller="Hotel" asp-action="AddRooms" asp-route-hotelId="@Model.HotelId">Add Rooms</a>
+<table class="table mt-4">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Room Type</th>
+            <th>Room Id</th>
+            <th>Room Capacity</th>
+            <th>Price per Night</th>
+            <th>Created At</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int counter = 1;
+        }
+        @if (Model.HotelRooms.Count() != 0)
+        {
+            @foreach (var room in Model.HotelRooms)
+            {
+                <tr>
+                    <td>@counter</td>
+                    <td>@room.Name</td>
+                    <td>@room.Id</td>
+                    <td>@room.Capacity</td>
+                    <td>@room.Price</td>
+                    <td>@room.Created</td>
+                    <td>
+                        <a class="btn btn-primary" asp-controller="Hotel" asp-action="" asp-route-hotelId="@room.Id">Details</a>
+                    </td>
+                </tr>
+                counter++;
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-danger text-center">No Room Type Available for this hotel.</td>
+            </tr>
+        }
+    </tbody>
+</table>

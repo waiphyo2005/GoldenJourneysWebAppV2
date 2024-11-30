@@ -12,6 +12,7 @@ namespace GoldenJourneysWebApp.Data.Entities
         [ForeignKey("RoomId")]
         public Rooms Rooms { get; set; }
         public DateOnly AvailableDate { get; set; }
+        public int OriginalQty { get; set; }
         public int AvailableQty { get; set; }
         public ICollection<RoomBook> RoomBook { get; set; }
     }

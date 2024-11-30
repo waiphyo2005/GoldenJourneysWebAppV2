@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\HotelImages\" />
+    <Folder Include="wwwroot\RoomImages\" />
     <Folder Include="wwwroot\TourImages\" />
   </ItemGroup>
 

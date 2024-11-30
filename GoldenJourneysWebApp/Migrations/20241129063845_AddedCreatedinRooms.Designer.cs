@@ -4,6 +4,7 @@ using GoldenJourneysWebApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GoldenJourneysWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241129063845_AddedCreatedinRooms")]
+    partial class AddedCreatedinRooms
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,9 +146,6 @@ namespace GoldenJourneysWebApp.Migrations
                         .HasColumnType("date");
 
                     b.Property<int>("AvailableQty")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OriginalQty")
                         .HasColumnType("int");
 
                     b.Property<int>("RoomId")

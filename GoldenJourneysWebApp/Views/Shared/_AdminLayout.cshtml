@@ -17,7 +17,7 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between align-items-center">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Users</a>
@@ -32,7 +32,9 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AdminProfile">Profile</a>
                         </li>
                     </ul>
+                    <a class="btn btn-danger" asp-controller="Home" asp-action="Logout">Logout</a>
                 </div>
+
             </div>
         </nav>
     </header>

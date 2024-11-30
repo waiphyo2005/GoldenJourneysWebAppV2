@@ -11,6 +11,7 @@
         public string ThumbnailURL { get; set; }
         public DateOnly Created {  get; set; }
         public string Status { get; set; }
+        public List<RoomsViewModel> HotelRooms { get; set; }
 
     }
 }

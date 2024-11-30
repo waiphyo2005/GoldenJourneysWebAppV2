@@ -2,17 +2,15 @@
 @{
 	Layout = "_AdminLayout";
 }
-<h2 class="text-center mb-5">@Model.Name</h2>
-@* <h4 class="text-success text-center mb-5">@TempData["Message"]</h4> *@
-
-
-@* <a class="btn btn-primary mb-3" asp-controller="Tour" asp-action="EditTourDetails" asp-route-Id="@Model.Id">Edit Details</a> *@
+<h2 class="text-center mb-4">@Model.Name</h2>
+<h4 class="text-success text-center mb-5">@TempData["Message"]</h4>
 
 <div class="container mb-5">
     <div class="mb-5 text-center">
         <img src="~/HotelImages/@Model.ThumbnailURL" class="img-fluid mb-3" style="width: 400px; height: 300px;" alt="@Model.ThumbnailURL">
     </div>
     <h4 class="mb-4">Hotel Details</h4>
+    <a class="btn btn-primary mb-3" asp-controller="Hotel" asp-action="EditHotelDetails" asp-route-hotelId="@Model.Id">Edit Details</a>
     <div class="mb-3">
         <span><strong>Hotel Id:</strong> @Model.Id</span>
     </div>
@@ -55,5 +53,47 @@
     <div class="mb-5">
         <span><strong>Status:</strong> @Model.Status</span>
     </div>
+
+    <h4 class="mb-4">Hotel's Rooms</h4>
+    <a class="btn btn-primary mb-3" asp-controller="Hotel" asp-action="ViewRooms" asp-route-hotelId="@Model.Id">Edit or Add Rooms</a>
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Room Type</th>
+                <th>Room Id</th>
+                <th>Room Capacity</th>
+                <th>Price per Night</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int counter = 1;
+            }
+            @if(Model.HotelRooms.Count() != 0)
+            {
+                @foreach (var room in Model.HotelRooms)
+                {
+                    <tr>
+                        <td>@counter</td>
+                        <td>@room.Name</td>
+                        <td>@room.Id</td>
+                        <td>@room.Capacity</td>
+                        <td>@room.Price</td>
+                        <td>@room.Created</td>
+                    </tr>
+                    counter++;
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="text-danger text-center">No Room Type Available for this hotel.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
     <a class="btn btn-primary" asp-controller="Hotel" asp-action="Index">Go Back</a>
 </div>

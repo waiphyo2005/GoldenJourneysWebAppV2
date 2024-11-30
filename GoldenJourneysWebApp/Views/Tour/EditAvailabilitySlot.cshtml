@@ -6,18 +6,15 @@
 <form method="post" class="container">
 
     <label class="form-label" asp-for="Id"></label>
-    <input type="number" asp-for="Id" class="form-control mb-3" readonly/>
-    <input type="number" asp-for="Id" class="form-control mb-3" hidden />
+    <input type="number" asp-for="Id" class="form-control mb-3" value="@Model.Id" readonly/>
 
     <input type="number" asp-for="TourId" class="form-control mb-3" hidden />
 
     <label class="form-label" asp-for="OriginalCapacity"></label>
-    <input type="number" asp-for="OriginalCapacity" class="form-control mb-3" readonly />
-    <input type="number" asp-for="OriginalCapacity" class="form-control mb-3" hidden />
+    <input type="number" asp-for="OriginalCapacity" class="form-control mb-3" value="@Model.OriginalCapacity" readonly />
 
     <label class="form-label" asp-for="AvailableCapacity"></label>
-    <input type="number" asp-for="AvailableCapacity" class="form-control mb-3" readonly />
-    <input type="number" asp-for="AvailableCapacity" class="form-control mb-3" hidden />
+    <input type="number" asp-for="AvailableCapacity" class="form-control mb-3" value="@Model.AvailableCapacity" readonly />
 
     <label class="form-label" asp-for="Date"></label>
     <input type="date" asp-for="Date" class="form-control mb-5" readonly />

@@ -117,7 +117,7 @@ namespace GoldenJourneysWebApp.Repository
         public List<DateOnly> CreateDateList(DateOnly StartDate, DateOnly EndDate)
         {
             List<DateOnly> dateList = new List<DateOnly>();
-            for (DateOnly date = StartDate; date < EndDate; date = date.AddDays(1))
+            for (DateOnly date = StartDate; date <= EndDate; date = date.AddDays(1))
             {
                 dateList.Add(date);
             }

@@ -45,7 +45,7 @@ namespace GoldenJourneysWebApp.Controllers
         [HttpPost]
         public IActionResult CreateHotel(CreateHotelViewModel hotel)
         {
-            var isNameUsed = _hotelService.ValidateHotelName(hotel);
+            var isNameUsed = _hotelService.ValidateHotelName(hotel.Name);
             if (isNameUsed)
             {
                 ModelState.AddModelError("Name", "Hotel name is already used. Please try another name.");
@@ -76,6 +76,102 @@ namespace GoldenJourneysWebApp.Controllers
         {
             var hotel = _hotelService.GetHotelById(hotelId);
             return View(hotel);
+        }
+
+
+        //Edit a hotel's details
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult EditHotelDetails(int hotelId)
+        {
+            var hotel = _hotelService.GetHotelDetailById(hotelId);
+            return View(hotel);
+        }
+        [HttpPost]
+        public IActionResult EditHotelDetails(HotelDetailEditViewModel hotel)
+        {
+            var isNameUsed = _hotelService.ValidateUpdateName(hotel.Name, hotel.Id);
+            if (isNameUsed)
+            {
+                ModelState.AddModelError("Name", "Hotel name is already used. Please try another name.");
+            }
+            if (hotel.newThumbnail != null)
+            {
+                string pattern = @"\.(jpg|jpeg|png|gif|bmp)$";
+                Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+                if (!regex.IsMatch(hotel.newThumbnail.FileName))
+                {
+                    ModelState.AddModelError("newThumbnail", $"Invalid File Type! Please upload image files only.");
+                }
+            }
+            if (ModelState.IsValid)
+            {
+                _hotelService.UpdateHotelDetail(hotel);
+                TempData["Message"] = "Hotel details has been successfully updated";
+                return RedirectToAction("ViewHotelDetails", "Hotel", new {hotelId = hotel.Id});
+            }
+            return View(hotel);
+        }
+
+
+        //View Rooms
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult ViewRooms(int hotelId)
+        {
+            var rooms = _hotelService.GetHotelRoomsById(hotelId);
+            return View(rooms);
+        }
+
+        //Add New Room
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult AddRooms(int hotelId)
+        {
+            ViewData["hotelId"] = hotelId;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult AddRooms(CreateRoomViewModel room)
+        {
+            if (room.StartDate > room.EndDate)
+            {
+                ModelState.AddModelError("StartDate", "Start Date must be earlier than the End Date.");
+                ModelState.AddModelError("EndDate", "End Date must be later than the Start Date.");
+            }
+            if (room.StartDate < DateOnly.FromDateTime(DateTime.Now))
+            {
+                ModelState.AddModelError("StartDate", "Invalid Start Date! The date must not be prior than today.");
+            }
+            if (room.Images != null)
+            {
+                string pattern = @"\.(jpg|jpeg|png|gif|bmp)$";
+                Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+
+                foreach (var image in room.Images)
+                {
+                    if (!regex.IsMatch(image.FileName))
+                    {
+                        ModelState.AddModelError("Images", $"Invalid File Type for {image.FileName}! Please upload image files only.");
+                    }
+                }
+            }
+            if (ModelState.IsValid)
+            {
+                _hotelService.AddHotelRoom(room);
+                _hotelService.UploadRoomImages(room);
+                _hotelService.UploadAvailabilitySlots(room);
+                TempData["Message"] = "Room has been successfully created!";
+                return RedirectToAction("ViewRooms", "Hotel", new { hotelId = room.hotelId });
+            }
+            return View(room);
+        }
+
+
+        //View Room Details
+        public IActionResult ViewRoomDetails (int roomId)
+        {
+            return View();
         }
     }
 }

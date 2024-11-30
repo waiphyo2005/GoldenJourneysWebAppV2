@@ -54,12 +54,16 @@ namespace GoldenJourneysWebApp.Controllers
                 ModelState.AddModelError("Name", "Package name is already used. Please try another name.");
             }
 
-            if (tour.StartDate >= tour.EndDate)
+            if (tour.StartDate > tour.EndDate)
             {
                 ModelState.AddModelError("StartDate", "Start Date must be earlier than the End Date.");
                 ModelState.AddModelError("EndDate", "End Date must be later than the Start Date.");
             }
-            if(tour.Images != null)
+            if (tour.StartDate < DateOnly.FromDateTime(DateTime.Now))
+            {
+                ModelState.AddModelError("StartDate", "Invalid Start Date! The date must not be prior than today.");
+            }
+            if (tour.Images != null)
             {
                 string pattern = @"\.(jpg|jpeg|png|gif|bmp)$";
                 Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
@@ -208,12 +212,12 @@ namespace GoldenJourneysWebApp.Controllers
         public IActionResult AddAvailabilitySlot(AddAvailabilityViewModel slot)
         {
             ViewData["tourId"] = slot.tourId;
-            if (slot.StartDate >= slot.EndDate)
+            if (slot.StartDate > slot.EndDate)
             {
                 ModelState.AddModelError("StartDate", "Start Date must be earlier than the End Date.");
                 ModelState.AddModelError("EndDate", "End Date must be later than the Start Date.");
             }
-            if(slot.StartDate <= DateOnly.FromDateTime(DateTime.Now))
+            if(slot.StartDate < DateOnly.FromDateTime(DateTime.Now))
             {
                 ModelState.AddModelError("StartDate", "Invalid Start Date! The date must not be prior than today.");
             }
