@@ -1,6 +1,7 @@
 ﻿using System;
 using GoldenJourneysWebApp.Data;
 using GoldenJourneysWebApp.Data.Entities;
+using GoldenJourneysWebApp.Enums;
 using GoldenJourneysWebApp.Models;
 
 namespace GoldenJourneysWebApp.Repository
@@ -26,7 +27,7 @@ namespace GoldenJourneysWebApp.Repository
                     Name = h.Name,
                     Type = h.Type,
                     Stars = h.Stars,
-                    Location = h.Location,
+                    States = h.StateorRegion,
                     Created = h.Created,
                     Status = h.Status,
                 }).ToList();
@@ -41,22 +42,23 @@ namespace GoldenJourneysWebApp.Repository
 					Name = h.Name,
 					Type = h.Type,
 					Stars = h.Stars,
-					Location = h.Location,
+					States = h.StateorRegion,
 					Created = h.Created,
 					Status = h.Status,
 				}).ToList();
 			return Hotels;
 		}
 
-		//Create New Hotels
-		public void CreateHotel(CreateHotelViewModel hotel)
+        //Create New Hotels
+        public void CreateHotel(CreateHotelViewModel hotel)
         {
             var newHotel = new Hotels
             {
                 Name = hotel.Name,
-                Type = hotel.Type,
+                Type = hotel.Type.ToString(),
                 Stars = hotel.Stars,
                 Location = hotel.Location,
+                StateorRegion = hotel.States.ToString(),
                 Description = hotel.Description,
                 ThumbnailImageURL = HotelInsertImages(hotel.ThumbnailImage),
                 Created = DateOnly.FromDateTime(DateTime.Now),
@@ -94,6 +96,7 @@ namespace GoldenJourneysWebApp.Repository
                     Type = h.Type,
                     Stars = h.Stars,
                     Location = h.Location,
+                    State = h.StateorRegion,
                     Description = h.Description,
                     Status = h.Status,
                     Created = h.Created,
@@ -114,14 +117,17 @@ namespace GoldenJourneysWebApp.Repository
         //Edit Hotel Details
         public HotelDetailEditViewModel GetHotelDetailById(int id)
         {
+            Type enumHotelType = typeof(HotelType);
+            Type enumState = typeof(States);
             var hotel = _context.Hotels.Where(h => h.Id == id)
                 .Select(h => new HotelDetailEditViewModel
                 {
                     Id = h.Id,
                     Name = h.Name,
-                    Type = h.Type,
+                    Type = (HotelType)Enum.Parse(enumHotelType, h.Type),
                     Stars = h.Stars,
                     Location = h.Location,
+                    States = (States)Enum.Parse(enumState, h.StateorRegion),
                     Description = h.Description,
                     Status = h.Status,
                     ThumbnailURL = h.ThumbnailImageURL,
@@ -137,8 +143,9 @@ namespace GoldenJourneysWebApp.Repository
             var existingHotel = _context.Hotels.FirstOrDefault(h => h.Id == hotel.Id);
             {
                 existingHotel.Name = hotel.Name;
-                existingHotel.Type = hotel.Type;
+                existingHotel.Type = hotel.Type.ToString();
                 existingHotel.Location = hotel.Location;
+                existingHotel.StateorRegion = hotel.States.ToString();
                 existingHotel.Stars = hotel.Stars;
                 existingHotel.Status = hotel.Status;
                 existingHotel.Description = hotel.Description;
@@ -201,7 +208,7 @@ namespace GoldenJourneysWebApp.Repository
         //CHANGE THE NAME TO ID
         public void UploadRoomImages(CreateRoomViewModel room)
         {
-            var newRoom = _context.Rooms.FirstOrDefault(r => r.Name == room.Name);
+            var newRoom = _context.Rooms.FirstOrDefault(r => r.Name == room.Name && r.HotelId == room.hotelId);
             int counter = 1;
             foreach (var image in room.Images)
             {
@@ -232,7 +239,7 @@ namespace GoldenJourneysWebApp.Repository
         public void UploadAvailabilitySlots(CreateRoomViewModel room)
         {
             var avaliableDates = CreateDateList(room.StartDate, room.EndDate);
-            var newRoom = _context.Rooms.FirstOrDefault(r => r.Name == room.Name);
+            var newRoom = _context.Rooms.FirstOrDefault(r => r.Name == room.Name && r.HotelId == room.hotelId);
             foreach (var date in avaliableDates)
             {
                 var newRoomType = new RoomAvailability
@@ -254,6 +261,10 @@ namespace GoldenJourneysWebApp.Repository
                 dateList.Add(date);
             }
             return dateList;
+        }
+        public bool RoomNameValidation(CreateRoomViewModel room)
+        {
+            return _context.Rooms.Any(r => r.HotelId == room.hotelId && r.Name == room.Name);
         }
     }
 }

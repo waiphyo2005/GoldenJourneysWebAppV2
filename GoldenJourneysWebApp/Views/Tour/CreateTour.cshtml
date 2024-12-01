@@ -1,4 +1,5 @@
-﻿@model TourCreateViewModel
+﻿@using GoldenJourneysWebApp.Enums
+@model TourCreateViewModel
 @{
     Layout = "_AdminLayout";
 }
@@ -10,9 +11,20 @@
         <input type="text" asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
-    <div class="mb-3">
+    @* <div class="mb-3">
         <label asp-for="Type" class="form-label"></label>
         <input type="text" asp-for="Type" class="form-control" />
+        <span asp-validation-for="Type" class="text-danger"></span>
+    </div> *@
+    <div class="mb-3">
+        <label asp-for="Type" class="form-label"></label>
+        <select asp-for="Type" class="form-select" required>
+            <option value="" selected disabled>Select Tour Type</option>
+            @foreach (var tourType in Enum.GetValues(typeof(TourType)).Cast<TourType>())
+            {
+                    <option value="@tourType">@tourType</option>
+            }
+        </select>
         <span asp-validation-for="Type" class="text-danger"></span>
     </div>
 
@@ -23,8 +35,20 @@
     </div>
 
     <div class="mb-3">
+        <label asp-for="States" class="form-label"></label>
+        <select asp-for="States" class="form-select" required>
+            <option value="" selected disabled>Select State or Region</option>
+            @foreach (var region in Enum.GetValues(typeof(States)).Cast<States>())
+            {
+                        <option value="@region">@region</option>
+            }
+        </select>
+        <span asp-validation-for="States" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
         <label asp-for="Price" class="form-label"></label>
-        <input type="number" asp-for="Price" class="form-control" min="0" />
+        <input type="number" asp-for="Price" class="form-control" />
         <span asp-validation-for="Price" class="text-danger"></span>
     </div>
 
@@ -56,7 +80,7 @@
 
     <div class="mb-3">
         <label asp-for="Capacity" class="form-label"></label>
-        <input type="number" asp-for="Capacity" class="form-control" min="1"/>
+        <input type="number" asp-for="Capacity" class="form-control"/>
         <span asp-validation-for="Capacity" class="text-danger"></span>
     </div>
 

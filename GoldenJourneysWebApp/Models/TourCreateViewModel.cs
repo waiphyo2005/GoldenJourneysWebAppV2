@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using GoldenJourneysWebApp.Enums;
 
 namespace GoldenJourneysWebApp.Models
 {
@@ -9,9 +10,12 @@ namespace GoldenJourneysWebApp.Models
         public string Name { get; set; }
         [Display(Name = "Package Type")]
         [Required(ErrorMessage = "Tour Type is required.")]
-        public string Type { get; set; }
+        public TourType Type { get; set; }
         [Required(ErrorMessage = "Tour Location is required.")]
         public string Location { get; set; }
+        [Required(ErrorMessage = "Hotel State or Region is required.")]
+        [Display(Name = "State or Region")]
+        public States States { get; set; }
         [Display(Name = "Price per Pax (USD)")]
         [Required(ErrorMessage = "Price per Customer is required.")]
         public double Price { get; set; }

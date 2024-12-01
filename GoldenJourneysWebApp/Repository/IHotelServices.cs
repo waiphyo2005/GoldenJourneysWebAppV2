@@ -7,7 +7,7 @@ namespace GoldenJourneysWebApp.Repository
         List<HotelViewModel> GetHotels();
         List<HotelViewModel> FilteredHotels(string Status);
 
-		void CreateHotel(CreateHotelViewModel hotel);
+        void CreateHotel(CreateHotelViewModel hotel);
         bool ValidateHotelName(string name);
         HotelDetailViewModel GetHotelById (int id);
         HotelDetailEditViewModel GetHotelDetailById(int id);
@@ -17,5 +17,6 @@ namespace GoldenJourneysWebApp.Repository
         void AddHotelRoom(CreateRoomViewModel hotelRooms);
         void UploadRoomImages(CreateRoomViewModel room);
         void UploadAvailabilitySlots(CreateRoomViewModel room);
+        bool RoomNameValidation(CreateRoomViewModel room);
     }
 }

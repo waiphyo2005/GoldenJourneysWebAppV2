@@ -24,6 +24,9 @@
         <span><strong>Location:</strong> @Model.Location</span>
     </div>
     <div class="mb-3">
+        <span><strong>State or Region:</strong> @Model.State</span>
+    </div>
+    <div class="mb-3">
         <span><strong>Hotel Rating:</strong> 
             @for(int i = 0; i<Model.Stars; i++)
             {
@@ -33,7 +36,7 @@
     </div>
     <div class="mb-3">
         <span><strong>Description:</strong> 
-            <textarea class="form-control">
+            <textarea class="form-control" rows="3" readonly>
                 @if (Model.Description != null)
                 {
                     @Model.Description

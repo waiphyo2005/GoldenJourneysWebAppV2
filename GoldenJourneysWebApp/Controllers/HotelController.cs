@@ -134,6 +134,23 @@ namespace GoldenJourneysWebApp.Controllers
         [HttpPost]
         public IActionResult AddRooms(CreateRoomViewModel room)
         {
+            var isRoomNameUsed = _hotelService.RoomNameValidation(room);
+            if (isRoomNameUsed)
+            {
+                ModelState.AddModelError("Name", "Room Type Name already exist for this Hotel. Please try another name.");
+            }
+            if (room.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Invalid Room Price.");
+            }
+            if (room.Capacity < 0)
+            {
+                ModelState.AddModelError("Capacity", "Invalid Room Capacity.");
+            }
+            if(room.RoomQty < 1)
+            {
+                ModelState.AddModelError("RoomQty", "Invalid Room Quantity.");
+            }
             if (room.StartDate > room.EndDate)
             {
                 ModelState.AddModelError("StartDate", "Start Date must be earlier than the End Date.");

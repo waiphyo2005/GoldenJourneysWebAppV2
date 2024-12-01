@@ -1,4 +1,5 @@
-﻿@model HotelDetailEditViewModel
+﻿@using GoldenJourneysWebApp.Enums
+@model HotelDetailEditViewModel
 @{
     Layout = "_AdminLayout";
     string star = "";
@@ -18,7 +19,13 @@
     </div>
     <div class="mb-3">
         <label asp-for="Type" class="form-label"></label>
-        <input type="text" asp-for="Type" class="form-control" />
+        <select asp-for="Type" class="form-select" required>
+            <option value="" selected disabled>Select Hotel Type</option>
+            @foreach (var hotelType in Enum.GetValues(typeof(HotelType)).Cast<HotelType>())
+            {
+                <option value="@hotelType">@hotelType</option>
+            }
+        </select>
         <span asp-validation-for="Type" class="text-danger"></span>
     </div>
 
@@ -39,6 +46,17 @@
         <label asp-for="Location" class="form-label"></label>
         <input type="text" asp-for="Location" class="form-control" />
         <span asp-validation-for="Location" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="States" class="form-label"></label>
+        <select asp-for="States" class="form-select" required>
+            <option value="" selected disabled>Select Hotel Location</option>
+            @foreach (var state in Enum.GetValues(typeof(States)).Cast<States>())
+            {
+                <option value="@state">@state</option>
+            }
+        </select>
+        <span asp-validation-for="States" class="text-danger"></span>
     </div>
 
     <div class="mb-3">

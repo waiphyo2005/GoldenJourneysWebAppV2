@@ -14,6 +14,8 @@ namespace GoldenJourneysWebApp.Data.Entities
         public int Stars { get; set; }
         [Required]
         public string Location { get; set; }
+        [Required]
+        public string StateorRegion { get; set; }
         public string? Description { get; set; }
         public string? ThumbnailImageURL { get; set; }
         [Required]

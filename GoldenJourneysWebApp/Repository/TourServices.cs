@@ -1,5 +1,6 @@
 ﻿using GoldenJourneysWebApp.Data;
 using GoldenJourneysWebApp.Data.Entities;
+using GoldenJourneysWebApp.Enums;
 using GoldenJourneysWebApp.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -24,6 +25,7 @@ namespace GoldenJourneysWebApp.Repository
                 Name = x.Name,
                 Type = x.Type,
                 Location = x.Location,
+                States = x.StateorRegion,
                 Price = x.Price,
                 Created = x.Created,
                 Status = x.Status,
@@ -38,6 +40,7 @@ namespace GoldenJourneysWebApp.Repository
                     Name = x.Name,
                     Type = x.Type,
                     Location = x.Location,
+                    States= x.StateorRegion,
                     Price = x.Price,
                     Created = x.Created,
                     Status = x.Status,
@@ -48,15 +51,19 @@ namespace GoldenJourneysWebApp.Repository
         {
             return _context.Tours.Any(t => t.Name == model.Name);
         }
-
+        public bool ValidateUpdatedName(TourDetailEditViewModel tour)
+        {
+            return _context.Tours.Any(t => t.Name == tour.Name && t.Id != tour.Id);
+        }
 
         public void UploadTourDetails(TourCreateViewModel tour)
         {
             var newTour = new Tours
             {
                 Name = tour.Name,
-                Type = tour.Type,
+                Type = tour.Type.ToString(),
                 Location = tour.Location,
+                StateorRegion = tour.States.ToString(),
                 Price = tour.Price,
                 Description = tour.Description,
                 Status = "Active",
@@ -134,6 +141,7 @@ namespace GoldenJourneysWebApp.Repository
                     Name = x.Name,
                     Type = x.Type,
                     Location = x.Location,
+                    States = x.StateorRegion,
                     Price = x.Price,
                     Description = x.Description,
                     Status = x.Status,
@@ -145,13 +153,16 @@ namespace GoldenJourneysWebApp.Repository
         }
         public TourDetailEditViewModel GetTourDetails(int Id)
         {
+            Type enumTourType = typeof(TourType);
+            Type enumRegion = typeof(States);
             var tour = _context.Tours.Where(t => t.Id == Id)
                 .Select(x => new TourDetailEditViewModel
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    Type = x.Type,
+                    Type = (TourType)Enum.Parse(enumTourType, x.Type),
                     Location = x.Location,
+                    States = (States)Enum.Parse(enumRegion, x.StateorRegion),
                     Price = x.Price,
                     Description = x.Description,
                     Status = x.Status,
@@ -163,8 +174,9 @@ namespace GoldenJourneysWebApp.Repository
             Tours existingDetails = _context.Tours.FirstOrDefault(t => t.Id == tour.Id);
             {
                 existingDetails.Name = tour.Name;
-                existingDetails.Type = tour.Type;
+                existingDetails.Type = tour.Type.ToString();
                 existingDetails.Location = tour.Location;
+                existingDetails.StateorRegion = tour.States.ToString();
                 existingDetails.Price = tour.Price;
                 existingDetails.Description = tour.Description;
                 existingDetails.Status = tour.Status;

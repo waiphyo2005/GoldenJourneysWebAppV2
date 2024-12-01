@@ -7,6 +7,7 @@
         public string Type { get; set; }
         public int Stars { get; set; }
         public string Location { get; set; }
+        public string State { get; set; }
         public string Description { get; set; }
         public string ThumbnailURL { get; set; }
         public DateOnly Created {  get; set; }

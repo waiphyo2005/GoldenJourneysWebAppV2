@@ -13,6 +13,8 @@ namespace GoldenJourneysWebApp.Data.Entities
         [Required]
         public string Location { get; set; }
         [Required]
+        public string StateorRegion { get; set; }
+        [Required]
         public double Price { get; set; }
 
         public string? Description { get; set; }

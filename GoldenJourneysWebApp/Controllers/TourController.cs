@@ -53,7 +53,14 @@ namespace GoldenJourneysWebApp.Controllers
             {
                 ModelState.AddModelError("Name", "Package name is already used. Please try another name.");
             }
-
+            if(tour.Capacity < 1)
+            {
+                ModelState.AddModelError("Capacity", "Invalid Tour Capacity.");
+            }
+            if(tour.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Invalid Tour Price.");
+            }
             if (tour.StartDate > tour.EndDate)
             {
                 ModelState.AddModelError("StartDate", "Start Date must be earlier than the End Date.");
@@ -113,6 +120,15 @@ namespace GoldenJourneysWebApp.Controllers
         [HttpPost]
         public IActionResult EditTourDetails(TourDetailEditViewModel tour)
         {
+            var isNameUsed = _tourService.ValidateUpdatedName(tour);
+            if (isNameUsed)
+            {
+                ModelState.AddModelError("Name", "Package name is already used. Please try another name.");
+            }
+            if (tour.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Invalid Tour Price.");
+            }
             if (ModelState.IsValid)
             {
                 _tourService.UploadTourDetails(tour);
@@ -227,6 +243,10 @@ namespace GoldenJourneysWebApp.Controllers
                 ModelState.AddModelError("StartDate", "Selected date or dates already exist. Cannot create new slot.");
                 ModelState.AddModelError("StartDate", "Selected date or dates already exist. Cannot create new slot.");
             }
+            if(slot.Capacity < 1)
+            {
+                ModelState.AddModelError("Capacity", "Invalid Tour Capacity.");
+            }
             if (ModelState.IsValid)
             {
                 _tourService.AddAvailableSlot(slot);
@@ -250,6 +270,10 @@ namespace GoldenJourneysWebApp.Controllers
             if(slot.Action == null)
             {
                 ModelState.AddModelError("Action", "Please select the action.");
+            }
+            if (slot.ActionCapacity < 1)
+            {
+                ModelState.AddModelError("ActionCapacity", "Invalid Capacity.");
             }
             if (slot.Action == "Deduct")
             {

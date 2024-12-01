@@ -51,12 +51,12 @@
 
     <div class="mb-3">
         <label asp-for="RoomQty" class="form-label"></label>
-        <input type="number" asp-for="RoomQty" class="form-control" min="1" />
+        <input type="number" asp-for="RoomQty" class="form-control" />
         <span asp-validation-for="RoomQty" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Create Room</button>
-    <a class="btn btn-primary" asp-controller="Hotel" asp-action="ViewHotelDetails" asp-route-hotelId="@ViewData["hotelId"]">Cancel</a>
+    <a class="btn btn-primary" asp-controller="Hotel" asp-action="ViewRooms" asp-route-hotelId="@ViewData["hotelId"]">Cancel</a>
 </form>
 
 <script>
