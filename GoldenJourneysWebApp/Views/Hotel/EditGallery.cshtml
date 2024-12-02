@@ -1,0 +1,33 @@
+﻿@model RoomGalleryViewModel
+@{
+	Layout = "_AdminLayout";
+}
+<h2 class="text-center mb-5">Edit Room Gallery</h2>
+<h4 class="mb-5">Room Gallary</h4>
+<h4 class="text-success text-center mb-5">@TempData["Message"]</h4>
+<div class="container mt-4 mb-3">
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
+        @if (Model.Images.Count() != 0)
+        {
+            @foreach (var imageUrl in Model.Images)
+            {
+                <div class="col">
+                    <div class="card position-relative">
+                        <img src="~/RoomImages/@imageUrl.MediaUrl" class="card-img-top" alt="@imageUrl.Title" style="object-fit: cover; width: 100%; height: 200px;">
+                        <a class="btn btn-danger position-absolute" style="top: 5px; right: 5px; z-index: 10;" asp-controller="Hotel" asp-action="SelectDeleteImage" asp-route-imageId="@imageUrl.Id">X</a>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="form-control text-danger">No Image Provided.</p>
+        }
+    </div>
+
+    <div class="d-flex justify-content-center align-items-center mb-3" style="height: 200px;">
+        <a class="btn btn-success" asp-controller="Hotel" asp-action="AddImage" asp-route-roomId="@Model.roomId">Add New Images</a>
+    </div>
+
+    <a class="btn btn-primary" asp-controller="Hotel" asp-action="ViewRoomDetails" asp-route-roomId="@Model.roomId">Go Back</a>
+</div>

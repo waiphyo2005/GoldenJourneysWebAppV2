@@ -134,6 +134,7 @@ namespace GoldenJourneysWebApp.Controllers
         [HttpPost]
         public IActionResult AddRooms(CreateRoomViewModel room)
         {
+            ViewData["hotelId"] = room.hotelId;
             var isRoomNameUsed = _hotelService.RoomNameValidation(room);
             if (isRoomNameUsed)
             {
@@ -186,9 +187,107 @@ namespace GoldenJourneysWebApp.Controllers
 
 
         //View Room Details
-        public IActionResult ViewRoomDetails (int roomId)
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult ViewRoomDetails(int roomId)
         {
+            var room = _hotelService.GetRoomById(roomId);
+            return View(room);
+        }
+
+        //Edit Room Details
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult EditRoomDetails(int roomId)
+        {
+            var room = _hotelService.GetRoomDetailsById(roomId);
+            return View(room);
+        }
+
+        [HttpPost]
+        public IActionResult EditRoomDetails(RoomDetailsEditViewModel room)
+        {
+            var isRoomNameUsed = _hotelService.RenameRoomNameValidation(room);
+            if (isRoomNameUsed)
+            {
+                ModelState.AddModelError("roomName", "Room Type Name already exist for this Hotel. Please try another name.");
+            }
+            if (room.Price < 0)
+            {
+                ModelState.AddModelError("Price", "Invalid Room Price.");
+            }
+            if (room.Capacity < 0)
+            {
+                ModelState.AddModelError("Capacity", "Invalid Room Capacity.");
+            }
+            if (ModelState.IsValid)
+            {
+                _hotelService.UpdateRoomDetails(room);
+                TempData["Message"] = "Room details has been successfully updated";
+                return RedirectToAction("ViewRoomDetails", "Hotel", new { roomId = room.roomId });
+            }
+            return View(room);
+        }
+
+        //Edit Room Gallery
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult EditGallery (int roomId)
+        {
+            var roomGallery = _hotelService.GetRoomGalleryById(roomId);
+            return View(roomGallery);
+        }
+        //Delete Image
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult SelectDeleteImage (int imageId)
+        {
+            var selectedImage = _hotelService.GetRoomImageById(imageId);
+            return View(selectedImage);
+        }
+        public IActionResult RemoveImage(int imageId, int roomId)
+        {
+            _hotelService.RemoveImage(imageId);
+            TempData["Message"] = "Image has been successfully removed!";
+            return RedirectToAction("EditGallery", "Hotel", new { roomId = roomId });
+        }
+
+        //Add new Images
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult AddImage(int roomId)
+        {
+            ViewData["RoomId"] = roomId;
             return View();
+        }
+        [HttpPost]
+        public IActionResult AddImage(AddImageViewModel image)
+        {
+            ViewData["RoomId"] = image.Id;
+            if (image.Images != null)
+            {
+                string pattern = @"\.(jpg|jpeg|png|gif|bmp)$";
+                Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+
+                foreach (var pic in image.Images)
+                {
+                    if (!regex.IsMatch(pic.FileName))
+                    {
+                        ModelState.AddModelError("Images", $"Invalid File Type for {pic.FileName}! Please upload image files only.");
+                    }
+                }
+            }
+            if (image.Images == null)
+            {
+                ModelState.AddModelError("Images", $"Please Select an Image.");
+            }
+            if (ModelState.IsValid)
+            {
+                _hotelService.AddRoomImage(image);
+                TempData["Message"] = "Image has been successfully added!";
+                return RedirectToAction("EditGallery", "Hotel", new { roomId = image.Id });
+            }
+            return View(image);
         }
     }
 }

@@ -1,0 +1,39 @@
+﻿@model RoomDetailsEditViewModel
+@{
+	Layout = "_AdminLayout";
+}
+<h2 class="text-center mb-3">@Model.hotelName</h2>
+<h3 class="text-center mb-5">@Model.roomName</h3>
+
+<form method="post" class="container" enctype="multipart/form-data">
+    <h3 class="text mb-5">Edit Room Details</h3>
+
+    <input type="number" asp-for="roomId" class="form-control" value="@Model.roomId" hidden />
+    <input type="number" asp-for="hotelId" class="form-control" value="@Model.hotelId" hidden />
+    <input type="text" asp-for="hotelName" class="form-control" value="@Model.hotelName" hidden />
+    
+    <div class="mb-3">
+        <label asp-for="roomName" class="form-label"></label>
+        <input type="text" asp-for="roomName" class="form-control" />
+        <span asp-validation-for="roomName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Capacity" class="form-label"></label>
+        <input type="number" asp-for="Capacity" class="form-control" />
+        <span asp-validation-for="Capacity" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label"></label>
+        <input type="number" asp-for="Price" class="form-control" min="0" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a class="btn btn-primary" asp-controller="Hotel" asp-action="ViewRoomDetails" asp-route-roomId="@Model.roomId">Cancel</a>
+</form>

@@ -79,7 +79,7 @@
         @{
             int counter = 1;
         }
-        @if (Model.AvalibleSlots.Count != 0)
+        @if (Model.AvalibleSlots.Count() != 0)
         {
             foreach (var slot in Model.AvalibleSlots)
             {

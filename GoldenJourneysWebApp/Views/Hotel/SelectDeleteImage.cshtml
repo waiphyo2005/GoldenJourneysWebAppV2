@@ -1,0 +1,17 @@
+﻿@model RoomImageViewModel
+@{
+	Layout = "_AdminLayout";
+}
+<div class="text-center">
+
+    <img src="~/RoomImages/@Model.MediaUrl" class="img-fluid mb-3" style="width: 400px; height: 300px;" alt="@Model.Title">
+
+
+    <h4>Are you sure you want to delete this image?</h4>
+
+
+    <div class="mt-4">
+        <a class="btn btn-danger" asp-controller="Hotel" asp-action="RemoveImage" asp-route-imageId="@Model.Id" asp-route-roomId="@Model.roomId">Yes, Delete</a>
+        <a class="btn btn-secondary" asp-controller="Hotel" asp-action="EditGallery" asp-route-roomId="@Model.roomId">Cancel</a>
+    </div>
+</div>

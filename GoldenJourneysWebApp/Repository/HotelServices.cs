@@ -3,6 +3,7 @@ using GoldenJourneysWebApp.Data;
 using GoldenJourneysWebApp.Data.Entities;
 using GoldenJourneysWebApp.Enums;
 using GoldenJourneysWebApp.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace GoldenJourneysWebApp.Repository
 {
@@ -160,7 +161,8 @@ namespace GoldenJourneysWebApp.Repository
         }
         public HotelRoomsViewModel GetHotelRoomsById(int id)
         {
-            var rooms = _context.Hotels.Select(h => new HotelRoomsViewModel
+            var rooms = _context.Hotels.Where(h => h.Id == id)
+                .Select(h => new HotelRoomsViewModel
             {
                 HotelId = id,
                 HotelName = h.Name,
@@ -265,6 +267,107 @@ namespace GoldenJourneysWebApp.Repository
         public bool RoomNameValidation(CreateRoomViewModel room)
         {
             return _context.Rooms.Any(r => r.HotelId == room.hotelId && r.Name == room.Name);
+        }
+
+        public RoomDetailsViewModel GetRoomById(int roomId)
+        {
+            var room = _context.Rooms.Where(r => r.Id == roomId)
+                .Select(r => new RoomDetailsViewModel{
+                    roomId = r.Id,
+                    hotelId = r.HotelId,
+                    hotelName = r.Hotels.Name,
+                    roomName = r.Name,
+                    Capacity = r.Capacity,
+                    Description = r.Description,
+                    Price = r.Price,
+                    Created = r.Created,
+                    Gallery = r.RoomMediaContent.ToList(),
+                    Availability = r.RoomAvailability.OrderBy(a => a.AvailableDate).ToList(),
+                }).FirstOrDefault();
+            return room;
+        }
+        public RoomDetailsEditViewModel GetRoomDetailsById(int roomId)
+        {
+            var room = _context.Rooms.Where(r => r.Id == roomId)
+                .Select(r => new RoomDetailsEditViewModel
+                {
+                    roomId = r.Id,
+                    roomName = r.Name,
+                    Capacity = r.Capacity,
+                    Description = r.Description,
+                    Price = r.Price,
+                    hotelId = r.HotelId,
+                    hotelName = r.Hotels.Name,
+                }).FirstOrDefault();
+            return room;
+        }
+
+        public bool RenameRoomNameValidation(RoomDetailsEditViewModel room)
+        {
+            return _context.Rooms.Any(r => r.HotelId == room.hotelId && r.Name == room.roomName && r.Id != room.roomId);
+        }
+
+        public void UpdateRoomDetails(RoomDetailsEditViewModel room)
+        {
+            var existingRoom = _context.Rooms.Where(r => r.Id == room.roomId).FirstOrDefault();
+            {
+                existingRoom.Name = room.roomName;
+                existingRoom.Capacity = room.Capacity;
+                existingRoom.Price = room.Price;
+                existingRoom.Description = room.Description;
+                _context.Rooms.Update(existingRoom);
+                _context.SaveChanges();
+            }
+        }
+        public RoomGalleryViewModel GetRoomGalleryById(int roomId)
+        {
+            var gallery = _context.RoomsMediaContents.Where(m => m.RoomId == roomId)
+                .Select(g => new RoomImageViewModel
+                {
+                    Id = g.Id,
+                    Title = g.Title,
+                    MediaUrl = g.MediaPathURL,
+                    roomId = g.RoomId,
+                }).ToList();
+            var roomGallery = new RoomGalleryViewModel
+            {
+                roomId = roomId,
+                Images = gallery,
+            };
+            return roomGallery;
+        }
+        public RoomImageViewModel GetRoomImageById(int imageId)
+        {
+            var image = _context.RoomsMediaContents.Where(m => m.Id == imageId)
+                .Select(i => new RoomImageViewModel
+                {
+                    Id= i.Id,
+                    Title = i.Title,
+                    MediaUrl = i.MediaPathURL,
+                    roomId= i.RoomId,
+                }).FirstOrDefault();
+            return image;
+        }
+        public void RemoveImage(int imageId)
+        {
+            var RemoveImage = _context.RoomsMediaContents.Where(r => r.Id == imageId).SingleOrDefault();
+            _context.RoomsMediaContents.Remove(RemoveImage);
+            _context.SaveChanges();
+        }
+        public void AddRoomImage(AddImageViewModel roomImage)
+        {
+            foreach (var pic in roomImage.Images)
+            {
+                string url = InsertImages(pic);
+                var newRoomMedia = new RoomMediaContent
+                {
+                    RoomId = roomImage.Id,
+                    Title = url,
+                    MediaPathURL = url,
+                };
+                _context.RoomsMediaContents.Add(newRoomMedia);
+                _context.SaveChanges();
+            }
         }
     }
 }
