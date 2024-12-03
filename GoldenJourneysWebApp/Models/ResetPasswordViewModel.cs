@@ -4,6 +4,7 @@ namespace GoldenJourneysWebApp.Models
 {
 	public class ResetPasswordViewModel
 	{
+        public int userId { get; set; }
 		public string Email { get; set; }
 
         [Required(ErrorMessage = "Password is required.")]

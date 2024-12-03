@@ -28,13 +28,13 @@ namespace GoldenJourneysWebApp.Controllers
         }
 
 
-        //Home Page (Login)
-        [Authorize(Roles = "Customer")]
-        [HttpGet]
-        public IActionResult LoginHome()
-        {
-            return View();
-        }
+        ////Home Page (Login)
+        //[Authorize(Roles = "Customer")]
+        //[HttpGet]
+        //public IActionResult LoginHome()
+        //{
+        //    return View();
+        //}
 
 
         //Privacy Page
@@ -102,9 +102,8 @@ namespace GoldenJourneysWebApp.Controllers
 						{
 							var claims = new List<Claim>
 							{
-                                new Claim(ClaimTypes.Name, user.Email),
-                                new Claim(ClaimTypes.Role, user.Type),
-
+                                new Claim(ClaimTypes.Name, user.Id.ToString()),
+                                new Claim(ClaimTypes.Role, user.Type)
                             };
 
 							var claimsIdentity = new ClaimsIdentity(claims,CookieAuthenticationDefaults.AuthenticationScheme);
@@ -116,15 +115,14 @@ namespace GoldenJourneysWebApp.Controllers
 						{
                             var claims = new List<Claim>
                             {
-                                new Claim(ClaimTypes.Name, user.Email),
-                                new Claim(ClaimTypes.Role, user.Type),
-
+                                new Claim(ClaimTypes.Name, user.Id.ToString()),
+                                new Claim(ClaimTypes.Role, user.Type)
                             };
 
                             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                             HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                            return RedirectToAction("LoginHome", "Home");
+                            return RedirectToAction("LoginHome", "Customer");
                         }
 					}
 				}
@@ -150,60 +148,60 @@ namespace GoldenJourneysWebApp.Controllers
         }
 
 
-        //Customer Profile
-        [Authorize(Roles = "Customer")]
-        [HttpGet]
-        public IActionResult CustomerProfile()
-        {
-            var user = _userService.GetProfileByEmail(HttpContext.User.Identity.Name);
-            return View(user);
-        }
+  //      //Customer Profile
+  //      [Authorize(Roles = "Customer")]
+  //      [HttpGet]
+  //      public IActionResult CustomerProfile()
+  //      {
+  //          var user = _userService.GetProfileByEmail(HttpContext.User.Identity.Name);
+  //          return View(user);
+  //      }
 
 
-        //Update Profile Details
-        [Authorize(Roles = "Customer")]
-        [HttpGet]
-        public IActionResult UpdateProfile(string email)
-        {
-            var user = _userService.GetProfileByEmail(email);
-            return View(user);
-        }
+  //      //Update Profile Details
+  //      [Authorize(Roles = "Customer")]
+  //      [HttpGet]
+  //      public IActionResult UpdateProfile(string email)
+  //      {
+  //          var user = _userService.GetProfileByEmail(email);
+  //          return View(user);
+  //      }
 
-        [HttpPost]
-        public IActionResult UpdateProfile(string email, AccountProfileViewModel user)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(user);
-            }
-            _userService.UpdateAccount(email, user);
-            TempData["Message"] = "Account has been Updated!";
-            return RedirectToAction("CustomerProfile", "Home");
-        }
+  //      [HttpPost]
+  //      public IActionResult UpdateProfile(string email, AccountProfileViewModel user)
+  //      {
+  //          if (!ModelState.IsValid)
+  //          {
+  //              return View(user);
+  //          }
+  //          _userService.UpdateAccount(email, user);
+  //          TempData["Message"] = "Account has been Updated!";
+  //          return RedirectToAction("CustomerProfile", "Home");
+  //      }
 
 
-        //Reset Password
-        [HttpGet]
-        public IActionResult ResetPassword(string email)
-        {
-            var user = _userService.GetUserForPasswordReset(email);
-            return View(user);
-        }
-        [HttpPost]
-        public IActionResult ResetPassword(string email, ResetPasswordViewModel user)
-		{
-            if (user.Password != user.ConfirmPassword)
-            {
-                ModelState.AddModelError("ConfirmPassword", "Two Passwords doesn't match.");
-            }
-			if (ModelState.IsValid)
-			{
-                _userService.UpdatePassword(email, user);
-                TempData["Message"] = "Password has been Updated!";
-                return RedirectToAction("CustomerProfile", "Home");
-			}
-            return View(user);
-        }
+  //      //Reset Password
+  //      [HttpGet]
+  //      public IActionResult ResetPassword(string email)
+  //      {
+  //          var user = _userService.GetUserForPasswordReset(email);
+  //          return View(user);
+  //      }
+  //      [HttpPost]
+  //      public IActionResult ResetPassword(string email, ResetPasswordViewModel user)
+		//{
+  //          if (user.Password != user.ConfirmPassword)
+  //          {
+  //              ModelState.AddModelError("ConfirmPassword", "Two Passwords doesn't match.");
+  //          }
+		//	if (ModelState.IsValid)
+		//	{
+  //              _userService.UpdatePassword(email, user);
+  //              TempData["Message"] = "Password has been Updated!";
+  //              return RedirectToAction("CustomerProfile", "Home");
+		//	}
+  //          return View(user);
+  //      }
 
 
 

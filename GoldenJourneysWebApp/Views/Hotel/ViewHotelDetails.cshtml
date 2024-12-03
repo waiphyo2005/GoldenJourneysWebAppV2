@@ -60,7 +60,7 @@
     <h4 class="mb-4">Hotel's Rooms</h4>
     <a class="btn btn-primary mb-3" asp-controller="Hotel" asp-action="ViewRooms" asp-route-hotelId="@Model.Id">Edit or Add Rooms</a>
     <table class="table mt-4">
-        <thead>
+        <thead class="text-center">
             <tr>
                 <th>No.</th>
                 <th>Room Type</th>
@@ -70,7 +70,7 @@
                 <th>Created At</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="text-center">
             @{
                 int counter = 1;
             }

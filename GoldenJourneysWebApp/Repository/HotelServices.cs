@@ -178,19 +178,6 @@ namespace GoldenJourneysWebApp.Repository
             return rooms;
         }
 
-        //public bool CheckDuplicateDate(CreateRoomViewModel room)
-        //{
-        //    var avaliableDates = CreateDateList(room.StartDate, room.EndDate);
-        //    foreach (var date in avaliableDates)
-        //    {
-        //        var isUsedDate = _context.RoomsAvailability.Any(a => a.RoomId == room.id && a.AvailableDate == date);
-        //        if (isUsedDate)
-        //        {
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
 
         public void AddHotelRoom(CreateRoomViewModel hotelRooms)
         {
@@ -366,6 +353,76 @@ namespace GoldenJourneysWebApp.Repository
                     MediaPathURL = url,
                 };
                 _context.RoomsMediaContents.Add(newRoomMedia);
+                _context.SaveChanges();
+            }
+        }
+        public RoomAvailabilityViewModel GetRoomAvailabilityById(int roomId)
+        {
+            var availableSlots = _context.RoomsAvailability.Where(a => a.RoomId ==  roomId).OrderBy(a => a.AvailableDate).ToList();
+            var slots = new RoomAvailabilityViewModel
+            {
+                roomId = roomId,
+                availableSlots = availableSlots,
+            };
+            return slots;
+        }
+        public void AddRoomAvailability(AddRoomAvailabilityViewModel slot)
+        {
+            var dates = CreateDateList(slot.StartDate,slot.EndDate);
+            foreach (var date in dates)
+            {
+                var newSlot = new RoomAvailability
+                {
+                    RoomId = slot.roomId,
+                    AvailableDate = date,
+                    OriginalQty = slot.Quantity,
+                    AvailableQty = slot.Quantity,
+                };
+                _context.RoomsAvailability.Add(newSlot);
+                _context.SaveChanges();
+            }
+        }
+        public bool CheckDuplicateDate(AddRoomAvailabilityViewModel slot)
+        {
+            var avaliableDates = CreateDateList(slot.StartDate, slot.EndDate);
+            foreach (var date in avaliableDates)
+            {
+                var isUsedDate = _context.RoomsAvailability.Any(a => a.RoomId == slot.roomId && a.AvailableDate == date);
+                if (isUsedDate)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public EditRoomAvailabilityViewModel GetRoomAvailabilitySlotById(int slotId)
+        {
+            var slot = _context.RoomsAvailability.Where(a => a.Id == slotId)
+                .Select(s => new EditRoomAvailabilityViewModel
+                {
+                    slotId = s.Id,
+                    roomId = s.RoomId,
+                    Date = s.AvailableDate,
+                    OriginalQty = s.OriginalQty,
+                    AvailableQty = s.AvailableQty,
+                }).FirstOrDefault();
+            return slot;
+        }
+        public void EditRoomQty(EditRoomAvailabilityViewModel slot)
+        {
+            var existingSlot = _context.RoomsAvailability.FirstOrDefault(s => s.Id == slot.slotId);
+            if (slot.Action == "Add")
+            {
+                existingSlot.OriginalQty += slot.ActionQty;
+                existingSlot.AvailableQty += slot.ActionQty;
+                _context.RoomsAvailability.Update(existingSlot);
+                _context.SaveChanges();
+            }
+            if (slot.Action == "Deduct")
+            {
+                existingSlot.OriginalQty -= slot.ActionQty;
+                existingSlot.AvailableQty -= slot.ActionQty;
+                _context.RoomsAvailability.Update(existingSlot);
                 _context.SaveChanges();
             }
         }

@@ -72,21 +72,21 @@ namespace GoldenJourneysWebApp.Controllers
         //Edit User Details
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public IActionResult EditUser(string email)
+        public IActionResult EditUser(int userId)
         {
-            UserViewModel user = _userService.GetUserByEmail(email);
+            UserViewModel user = _userService.GetUserById(userId);
             return View(user);
         }
 
         [HttpPost]
-        public IActionResult EditUser(string email, UserViewModel user)
+        public IActionResult EditUser(UserViewModel user)
         {
             if (!ModelState.IsValid)
             {
                 return View(user);
             }
             TempData["Message"] = "Record has been Updated!";
-            _userService.UserEdit(email, user);
+            _userService.UserEdit(user);
             return RedirectToAction("Index", "Admin");
         }
 
@@ -96,7 +96,8 @@ namespace GoldenJourneysWebApp.Controllers
         [HttpGet]
         public IActionResult AdminProfile()
         {
-            UserViewModel admin = _userService.GetUserByEmail(HttpContext.User.Identity.Name);
+            var adminId = Convert.ToInt32(HttpContext.User.Identity.Name);
+			UserViewModel admin = _userService.GetUserById(adminId);
             return View(admin);
         }
 
@@ -104,13 +105,13 @@ namespace GoldenJourneysWebApp.Controllers
         //Reset Password
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public IActionResult AdminResetPassword(string email)
+        public IActionResult AdminResetPassword(int userId)
         {
-            var user = _userService.GetUserForPasswordReset(email);
+            var user = _userService.GetUserForPasswordReset(userId);
             return View(user);
         }
         [HttpPost]
-        public IActionResult AdminResetPassword(string email, ResetPasswordViewModel user)
+        public IActionResult AdminResetPassword(ResetPasswordViewModel user)
         {
             if (user.Password != user.ConfirmPassword)
             {
@@ -118,7 +119,7 @@ namespace GoldenJourneysWebApp.Controllers
             }
             if (ModelState.IsValid)
             {
-                _userService.UpdatePassword(email, user);
+                _userService.UpdatePassword(user);
                 TempData["Message"] = "Password has been Updated!";
                 return RedirectToAction("AdminProfile", "Admin");
             }

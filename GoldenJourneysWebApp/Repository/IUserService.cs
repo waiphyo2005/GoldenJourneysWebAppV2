@@ -11,11 +11,12 @@ namespace GoldenJourneysWebApp.Repository
         void AdminCreate(AdminCreateViewModel admin);
         void CustomerRegister(CustomerRegistrationViewModel customer);
         UserViewModel GetUserByEmail(string userEmail);
-        void UserEdit(string email, UserViewModel user);
+        void UserEdit(UserViewModel user);
         bool ValidateUser(LoginViewModel loginUser);
-        AccountProfileViewModel GetProfileByEmail(string userEmail);
-        void UpdateAccount(string email, AccountProfileViewModel user);
-        ResetPasswordViewModel GetUserForPasswordReset(string email);
-        void UpdatePassword(string email, ResetPasswordViewModel user);
+        AccountProfileViewModel GetProfileById(int userId);
+        void UpdateAccount(AccountProfileViewModel user);
+        ResetPasswordViewModel GetUserForPasswordReset(int userId);
+        void UpdatePassword(ResetPasswordViewModel user);
+        UserViewModel GetUserById(int userId);
     }
 }

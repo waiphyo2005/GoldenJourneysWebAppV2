@@ -95,9 +95,9 @@ namespace GoldenJourneysWebApp.Repository
 				}).SingleOrDefault();
             return user;
         }
-        public void UserEdit(string userEmail, UserViewModel user)
+        public void UserEdit(UserViewModel user)
         {
-            User existingUser = _context.Users.FirstOrDefault(u => u.Email == userEmail);
+            User existingUser = _context.Users.FirstOrDefault(u => u.Id == user.Id);
             {
                 existingUser.UserName = user.UserName;
                 existingUser.Email = user.Email;
@@ -118,11 +118,12 @@ namespace GoldenJourneysWebApp.Repository
             }
             return false;
         }
-        public AccountProfileViewModel GetProfileByEmail(string userEmail)
+        public AccountProfileViewModel GetProfileById(int userId)
         {
-            var user = _context.Users.Where(u => u.Email == userEmail)
+            var user = _context.Users.Where(u => u.Id == userId)
                 .Select(x => new AccountProfileViewModel
                 {
+                    userId = x.Id,
                     UserName = x.UserName,
                     Email = x.Email,
                     PhoneNumber = x.PhoneNumber,
@@ -130,9 +131,9 @@ namespace GoldenJourneysWebApp.Repository
                 }).SingleOrDefault();
             return user;
         }
-        public void UpdateAccount(string userEmail, AccountProfileViewModel user)
+        public void UpdateAccount(AccountProfileViewModel user)
         {
-            User existingUser = _context.Users.FirstOrDefault(u => u.Email == userEmail);
+            User existingUser = _context.Users.FirstOrDefault(u => u.Id == user.userId);
             {
                 existingUser.UserName = user.UserName;
                 existingUser.Email = user.Email;
@@ -142,19 +143,20 @@ namespace GoldenJourneysWebApp.Repository
                 _context.SaveChanges();
             }
         }
-        public ResetPasswordViewModel GetUserForPasswordReset(string email)
+        public ResetPasswordViewModel GetUserForPasswordReset(int userId)
         {
-			var user = _context.Users.Where(u => u.Email == email)
+			var user = _context.Users.Where(u => u.Id == userId)
 				.Select(x => new ResetPasswordViewModel
 				{
+                    userId = x.Id,
 					Email = x.Email,
                     Password = x.Password,
 				}).SingleOrDefault();
 			return user;
 		}
-		public void UpdatePassword(string email, ResetPasswordViewModel user)
+		public void UpdatePassword(ResetPasswordViewModel user)
 		{
-			User existingUser = _context.Users.FirstOrDefault(u => u.Email == email);
+			User existingUser = _context.Users.FirstOrDefault(u => u.Id == user.userId);
 			{
 				existingUser.Email = user.Email;
                 existingUser.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
@@ -162,6 +164,22 @@ namespace GoldenJourneysWebApp.Repository
 				_context.SaveChanges();
 			}
 		}
+        public UserViewModel GetUserById(int userId)
+        {
+            var user = _context.Users.Where(u => u.Id == userId)
+                .Select(x => new UserViewModel
+                {
+                    Id = x.Id,
+                    UserName = x.UserName,
+                    Email = x.Email,
+                    PhoneNumber = x.PhoneNumber,
+                    Address = x.Address,
+                    Type = x.UserType.Type,
+                    CreatedAt = x.CreatedAt,
+                    Status = x.Status,
+                }).FirstOrDefault();
+            return user;
+        }
 
-	}
+    }
 }

@@ -1,0 +1,48 @@
+﻿@model RoomAvailabilityViewModel
+@{
+	Layout = "_AdminLayout";
+}
+<h2 class="text-center mb-5">Room Available Dates and Capacity</h2>
+<h4 class="text-success text-center mb-5">@TempData["Message"]</h4>
+<a class="btn btn-primary mb-3" asp-controller="Hotel" asp-action="AddAvailabilitySlot" asp-route-roomId="@Model.roomId">Add Availability Slot</a>
+<table class="table mt-2">
+    <thead class="text-center">
+        <tr>
+            <th>No.</th>
+            <th>Date</th>
+            <th>Initial Room Quantity</th>
+            <th>Available Room Quantity</th>
+            <th>Slot Id</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int counter = 1;
+        }
+        @if (Model.availableSlots.Count() != 0)
+        {
+            foreach (var slot in Model.availableSlots)
+            {
+                <tr class="text-center">
+                    <td>@counter.</td>
+                    <td>@slot.AvailableDate</td>
+                    <td>@slot.OriginalQty</td>
+                    <td>@slot.AvailableQty</td>
+                    <td>@slot.Id</td>
+                    <td>
+                        <a class="btn btn-primary" asp-controller="Hotel" asp-action="EditAvailableSlots" asp-route-slotId="@slot.Id">Edit</a>
+                    </td>
+                </tr>
+                counter++;
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-danger text-center">Package not available on any dates.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a class="btn btn-primary mb-3" asp-controller="Hotel" asp-action="ViewRoomDetails" asp-route-roomId="@Model.roomId">Go Back</a>

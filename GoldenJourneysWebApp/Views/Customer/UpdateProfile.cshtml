@@ -1,16 +1,12 @@
-﻿@model UserViewModel
+﻿@model AccountProfileViewModel
 @{
-    Layout = "_AdminLayout";
+    Layout = "_CustomerLayout";
 }
 <h2 class="text-center mb-5">Edit User Account</h2>
 
 <form method="post" class="container">
 
-    <div class="mb-3">
-        <label asp-for="Id" class="form-label"></label>
-        <input asp-for="Id" readonly class="form-control-plaintext" />
-    </div>
-
+    <input type="number" asp-for="userId" hidden />
     <div class="mb-3">
         <label asp-for="UserName" class="form-label"></label>
         <input type="text" asp-for="UserName" class="form-control" />
@@ -35,27 +31,7 @@
         <span asp-validation-for="Address" class="text-danger"></span>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="Type" class="form-label"></label>
-        <input asp-for="Type" readonly class="form-control-plaintext" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Status" class="form-label"></label>
-        <select asp-for="Status" class="form-select">
-            <option value="" selected disabled>Select Account Status</option>
-            <option value="Active">Active</option>
-            <option value="Disabled">Disabled</option>
-            <option value="Pending">Pending</option>
-        </select>
-        <span asp-validation-for="Status" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="CreatedAt" class="form-label"></label>
-        <input asp-for="CreatedAt" readonly class="form-control-plaintext" />
-    </div>
 
     <button type="submit" class="btn btn-primary">Save</button>
-    <a class="btn btn-primary" asp-controller="Admin" asp-action="Index">Cancel</a>
+    <a class="btn btn-primary" asp-controller="Customer" asp-action="CustomerProfile">Cancel</a>
 </form>

@@ -1,0 +1,44 @@
+﻿@model EditRoomAvailabilityViewModel
+@{
+	Layout = "_AdminLayout";
+}
+<h2 class="text-center mb-5">Edit Availability Slot</h2>
+<form method="post" class="container">
+
+    <label class="form-label" asp-for="slotId"></label>
+    <input type="number" asp-for="slotId" class="form-control mb-3" value="@Model.slotId" readonly />
+
+    <input type="number" asp-for="slotId" class="form-control mb-3" hidden />
+    <input type="number" asp-for="roomId" class="form-control mb-3" hidden />
+
+
+    <label class="form-label" asp-for="OriginalQty"></label>
+    <input type="number" asp-for="OriginalQty" class="form-control mb-3" value="@Model.OriginalQty" readonly />
+
+    <label class="form-label" asp-for="AvailableQty"></label>
+    <input type="number" asp-for="AvailableQty" class="form-control mb-3" value="@Model.AvailableQty" readonly />
+
+    <label class="form-label" asp-for="Date"></label>
+    <input type="date" asp-for="Date" class="form-control mb-5" readonly />
+    <input type="date" asp-for="Date" class="form-control mb-3" hidden />
+
+    <h4 class="mb-5">Please Select the Action you want to perfrom for this Available Slot</h4>
+    <div class="mb-3">
+        <label asp-for="Action" class="form-label"></label>
+        <select asp-for="Action" class="form-select" required>
+            <option value="" selected disabled>Select Action</option>
+            <option value="Add">Add Capacity</option>
+            <option value="Deduct">Deduct Capacity</option>
+        </select>
+        <span asp-validation-for="Action" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ActionQty" class="form-label"></label>
+        <input type="number" asp-for="ActionQty" class="form-control" />
+        <span asp-validation-for="ActionQty" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a class="btn btn-primary" asp-controller="Hotel" asp-action="ViewAvailabilitySlots" asp-route-roomId="@Model.roomId">Cancel</a>
+</form>

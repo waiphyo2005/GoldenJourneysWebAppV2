@@ -68,10 +68,10 @@
 </div>
 
 <h4 class="mb-4">Room Available Dates and Quantity</h4>
-@* <a class="btn btn-primary mb-3" asp-controller="Tour" asp-action="ViewAvailabilitySlots" asp-route-tourId="@Model.Id">Edit Dates and Capacity</a> *@
+<a class="btn btn-primary mb-3" asp-controller="Hotel" asp-action="ViewAvailabilitySlots" asp-route-roomId="@Model.roomId">Edit Dates and Capacity</a>
 
 <table class="table mt-2">
-    <thead>
+    <thead class="text-center">
         <tr>
             <th>No.</th>
             <th>Date</th>
@@ -88,7 +88,7 @@
         {
             foreach (var slot in Model.Availability)
             {
-                <tr>
+                <tr class="text-center">
                     <td>@counter.</td>
                     <td>@slot.AvailableDate</td>
                     <td>@slot.OriginalQty</td>

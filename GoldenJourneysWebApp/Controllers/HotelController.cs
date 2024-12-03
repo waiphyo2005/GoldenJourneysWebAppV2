@@ -289,5 +289,91 @@ namespace GoldenJourneysWebApp.Controllers
             }
             return View(image);
         }
+
+
+        //Edit Available slots
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult ViewAvailabilitySlots(int roomId)
+        {
+            var slots = _hotelService.GetRoomAvailabilityById(roomId);
+            return View(slots);
+        }
+
+		//Add Available slots
+		[Authorize(Roles = "Admin")]
+		[HttpGet]
+        public IActionResult AddAvailabilitySlot(int roomId)
+        {
+			ViewData["RoomId"] = roomId;
+            return View();
+		}
+        [HttpPost]
+        public IActionResult AddAvailabilitySlot(AddRoomAvailabilityViewModel slot)
+        {
+            ViewData["RoomId"] = slot.roomId;
+            if (slot.StartDate > slot.EndDate)
+            {
+                ModelState.AddModelError("StartDate", "Start Date must be earlier than the End Date.");
+                ModelState.AddModelError("EndDate", "End Date must be later than the Start Date.");
+            }
+            if (slot.StartDate < DateOnly.FromDateTime(DateTime.Now))
+            {
+                ModelState.AddModelError("StartDate", "Invalid Start Date! The date must not be prior than today.");
+            }
+            var isSlotExist = _hotelService.CheckDuplicateDate(slot);
+            if (isSlotExist)
+            {
+                ModelState.AddModelError("StartDate", "Selected date already exist. Cannot create new Slot.");
+                ModelState.AddModelError("EndDate", "Selected date already exist. Cannot create new Slot.");
+            }
+            if (slot.Quantity < 1)
+            {
+                ModelState.AddModelError("Quantity", "Invalid Room Quantity.");
+            }
+            if (ModelState.IsValid)
+            {
+                _hotelService.AddRoomAvailability(slot);
+                TempData["Message"] = "New availability slots has been successfully added!";
+                return RedirectToAction("ViewAvailabilitySlots", "Hotel", new { roomId = slot.roomId });
+            }
+            return View(slot);
+        }
+
+
+        //Edit Available Slots
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult EditAvailableSlots(int slotId)
+        {
+            var slot = _hotelService.GetRoomAvailabilitySlotById(slotId);
+            return View(slot);
+        }
+        [HttpPost]
+        public IActionResult EditAvailableSlots(EditRoomAvailabilityViewModel slot)
+        {
+            if (slot.Action == null)
+            {
+                ModelState.AddModelError("Action", "Please select the action.");
+            }
+            if (slot.ActionQty < 1)
+            {
+                ModelState.AddModelError("ActionQty", "Invalid Quantity.");
+            }
+            if (slot.Action == "Deduct")
+            {
+                if (slot.ActionQty > slot.AvailableQty)
+                {
+                    ModelState.AddModelError("ActionQty", "Not Enough Available Quantity to Deduct!");
+                }
+            }
+            if (ModelState.IsValid)
+            {
+                _hotelService.EditRoomQty(slot);
+                TempData["Message"] = "Availability slots has been successfully updated!";
+                return RedirectToAction("ViewAvailabilitySlots", "Hotel", new { roomId = slot.roomId });
+            }
+            return View(slot);
+        }
     }
 }

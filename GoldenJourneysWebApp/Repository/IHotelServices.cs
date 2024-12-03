@@ -25,5 +25,10 @@ namespace GoldenJourneysWebApp.Repository
         RoomImageViewModel GetRoomImageById(int imageId);
         void RemoveImage(int imageId);
         void AddRoomImage(AddImageViewModel roomImage);
+        RoomAvailabilityViewModel GetRoomAvailabilityById(int roomId);
+        void AddRoomAvailability (AddRoomAvailabilityViewModel slot);
+        bool CheckDuplicateDate(AddRoomAvailabilityViewModel slot);
+        EditRoomAvailabilityViewModel GetRoomAvailabilitySlotById(int slotId);
+        void EditRoomQty(EditRoomAvailabilityViewModel slot);
     }
 }
