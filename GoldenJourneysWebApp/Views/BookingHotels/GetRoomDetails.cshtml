@@ -1,0 +1,125 @@
+﻿@model UserRoomViewandBookingModel
+@{
+	Layout = "_CustomerLayout";
+}
+
+<div class="container-fluid py-4 bg-light">
+    <div class="container">
+        <div class="row g-4">
+
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <h1 class="display-6 text-primary mb-3">@Model.roomName</h1>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <h5 class="text-muted">Room Details</h5>
+                                    <ul class="list-unstyled">
+                                        <li class="mb-2"><i class="bi bi-tags text-primary me-2"></i><strong>Maximum Capacity:</strong> @Model.roomCapacity</li>
+                                        <li class="mb-2"><i class="bi bi-cash-coin text-primary me-2"></i><strong>Price:</strong> $@Model.price per person</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <h5 class="text-muted mb-3">Description</h5>
+                            <p class="text-muted">@Model.description</p>
+                        </div>
+
+                        <!-- Tour Gallery -->
+                        <div class="mt-4">
+                            <h5 class="text-muted mb-3">Room Gallery</h5>
+                            <div id="tourGallery" class="carousel slide rounded overflow-hidden" data-bs-ride="false">
+                                <div class="carousel-inner">
+                                    @foreach (var (image, index) in Model.gallery.Select((img, idx) => (img, idx)))
+                                    {
+                                        <div class="carousel-item @(index == 0 ? "active" : "")">
+                                            <img src="~/RoomImages/@image.MediaPathURL" 
+                                                 class="d-block w-100" 
+                                                 style="height: 400px; object-fit: cover;" 
+                                                 alt="Tour Image @(index + 1)">
+                                        </div>
+                                    }
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#tourGallery" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#tourGallery" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking Form Column -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h4 class="card-title text-center mb-4 text-primary">Book This Room</h4>
+                        <form method="post">
+                            <div class="mb-3">
+                                <label for="Date" class="form-label">Select Date</label>
+                                <div class="input-group">
+                                    <p class="mb-2>From Date</p>
+                                    <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                                    <input type="date" asp-for="selectedBookingStartDate" class="form-control mb-3" required min="@DateTime.Now.ToString("yyyy-MM-dd")">
+                                    <span asp-validation-for="selectedBookingStartDate" class="text-danger"></span>
+                                </div>
+                                <div class="input-group">
+                                    <p class="mb-2">To Date</p>
+                                    <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                                    <input type="date" asp-for="selectedBookingEndDate" class="form-control" required min="@DateTime.Now.ToString("yyyy-MM-dd")">
+                                    <span asp-validation-for="selectedBookingEndDate" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="Capacity" class="form-label">Number of Rooms</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-people"></i></span>
+                                    <input type="number" asp-for="bookingQty" class="form-control" min="1" required>
+                                    <span asp-validation-for="bookingQty" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="AdditionalRequests" class="form-label">Additional Requests</label>
+                                <textarea class="form-control" asp-for="additionalRequest" rows="4" placeholder="Any special requests or information you'd like to share (optional)"></textarea>
+                            </div>
+
+                            <input type="hidden" asp-for="userId" value="@ViewData["userId"]" />
+
+                            <input type="hidden" asp-for="roomId" value="@Model.roomId" />
+                            <input type="hidden" asp-for="roomName" value="@Model.roomName" />
+                            <input type="hidden" asp-for="roomCapacity" value="@Model.roomCapacity" />
+                            <input type="hidden" asp-for="description" value="@Model.description" />
+                            <input type="hidden" asp-for="price" value="@Model.price" />
+                            @for (int i = 0; i < Model.gallery.Count(); i++)
+                            {
+                                <input type="hidden" asp-for="gallery[i].Id" />
+                                <input type="hidden" asp-for="gallery[i].Title" />
+                                <input type="hidden" asp-for="gallery[i].MediaPathURL" />
+                                <input type="hidden" asp-for="gallery[i].RoomId" />
+                            }
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-check-circle me-2"></i>Book Now
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">

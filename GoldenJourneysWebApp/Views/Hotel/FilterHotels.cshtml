@@ -52,7 +52,7 @@
 				<td>@hotel.Status</td>
 				<td>@hotel.Created</td>
 				<td>
-					<a class="btn btn-primary" asp-controller="" asp-action="" asp-route-id="@hotel.Id">Details</a>
+					<a class="btn btn-primary" asp-controller="Hotel" asp-action="ViewHotelDetails" asp-route-hotelId="@hotel.Id">Details</a>
 				</td>
 			</tr>
 			counter++;

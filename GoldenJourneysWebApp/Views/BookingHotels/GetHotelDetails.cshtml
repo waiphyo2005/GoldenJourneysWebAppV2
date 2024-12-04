@@ -1,0 +1,40 @@
+﻿@model UserHotelDetailsViewModel
+@{
+	Layout = "_CustomerLayout";
+}
+
+<div class="hotel-details">
+    <h1>@Model.HotelName</h1>
+    <p><strong>Type:</strong> @Model.HotelType</p>
+    <p><strong>Stars:</strong>
+        @for (int i = 0; i < Model.HotelStars; i++)
+        {
+            @("☆")
+            ;
+        }
+    </p>
+    <p><strong>Location:</strong> @Model.HotelLocation</p>
+    <p><strong>State/Region:</strong> @Model.StateorRegion</p>
+    <p><strong>Description:</strong> @Model.HotelDescription</p>
+
+    @if (!string.IsNullOrEmpty(Model.Thumbnail))
+    {
+        <img src="~/HotelImages/@Model.Thumbnail" alt="@Model.HotelName Thumbnail" class="img-thumbnail mx-auto d-block" style="width: 400px; height: 400px; object-fit: cover;" />
+    }
+
+    <h3 class="mt-4">Rooms</h3>
+    <div class="row">
+        @foreach (var room in Model.Rooms)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@room.Name</h5>
+                        <a asp-controller="BookingHotels" asp-action="GetRoomDetails" asp-route-roomId="@room.Id" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

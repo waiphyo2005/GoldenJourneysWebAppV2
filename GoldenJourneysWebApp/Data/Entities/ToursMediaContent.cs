@@ -14,6 +14,6 @@ namespace GoldenJourneysWebApp.Data.Entities
         [Required]
         public int TourId { get; set; }
         [ForeignKey("TourId")]
-        public Tours Tours { get; set; }
+        public Tours? Tours { get; set; }
     }
 }

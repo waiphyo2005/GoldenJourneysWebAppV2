@@ -14,9 +14,13 @@ namespace GoldenJourneysWebApp.Controllers
     public class HomeController : Controller
     {
 		private IUserService _userService;
-		public HomeController(IUserService userService)
+		private IBookingTourServices _bookingTourServices;
+		private IBookingHotelServices _bookingHotelServices;
+		public HomeController(IUserService userService, IBookingTourServices bookingTourServices, IBookingHotelServices bookingHotelServices)
 		{
 			_userService = userService;
+			_bookingTourServices = bookingTourServices;
+			_bookingHotelServices = bookingHotelServices;
 		}
 
 
@@ -26,15 +30,6 @@ namespace GoldenJourneysWebApp.Controllers
         {
             return View();
         }
-
-
-        ////Home Page (Login)
-        //[Authorize(Roles = "Customer")]
-        //[HttpGet]
-        //public IActionResult LoginHome()
-        //{
-        //    return View();
-        //}
 
 
         //Privacy Page
@@ -147,63 +142,19 @@ namespace GoldenJourneysWebApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+		//View Available Tours
+		public IActionResult DisplayTourPackages()
+		{
+			var allTours = _bookingTourServices.AllTours();
+			return View(allTours);
+		}
 
-  //      //Customer Profile
-  //      [Authorize(Roles = "Customer")]
-  //      [HttpGet]
-  //      public IActionResult CustomerProfile()
-  //      {
-  //          var user = _userService.GetProfileByEmail(HttpContext.User.Identity.Name);
-  //          return View(user);
-  //      }
-
-
-  //      //Update Profile Details
-  //      [Authorize(Roles = "Customer")]
-  //      [HttpGet]
-  //      public IActionResult UpdateProfile(string email)
-  //      {
-  //          var user = _userService.GetProfileByEmail(email);
-  //          return View(user);
-  //      }
-
-  //      [HttpPost]
-  //      public IActionResult UpdateProfile(string email, AccountProfileViewModel user)
-  //      {
-  //          if (!ModelState.IsValid)
-  //          {
-  //              return View(user);
-  //          }
-  //          _userService.UpdateAccount(email, user);
-  //          TempData["Message"] = "Account has been Updated!";
-  //          return RedirectToAction("CustomerProfile", "Home");
-  //      }
-
-
-  //      //Reset Password
-  //      [HttpGet]
-  //      public IActionResult ResetPassword(string email)
-  //      {
-  //          var user = _userService.GetUserForPasswordReset(email);
-  //          return View(user);
-  //      }
-  //      [HttpPost]
-  //      public IActionResult ResetPassword(string email, ResetPasswordViewModel user)
-		//{
-  //          if (user.Password != user.ConfirmPassword)
-  //          {
-  //              ModelState.AddModelError("ConfirmPassword", "Two Passwords doesn't match.");
-  //          }
-		//	if (ModelState.IsValid)
-		//	{
-  //              _userService.UpdatePassword(email, user);
-  //              TempData["Message"] = "Password has been Updated!";
-  //              return RedirectToAction("CustomerProfile", "Home");
-		//	}
-  //          return View(user);
-  //      }
-
-
+		//View Available Hotels
+		public IActionResult DisplayHotels()
+		{
+			var allHotels = _bookingHotelServices.GetAllHotels();
+			return View(allHotels);
+		}
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

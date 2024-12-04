@@ -14,9 +14,14 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
+//OBJECT LIFETIME
+//Environment Variable
+//Deployment
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITourServices, TourServices>();
 builder.Services.AddScoped<IHotelServices, HotelServices>();
+builder.Services.AddScoped<IBookingTourServices, BookingTourServices>();
+builder.Services.AddScoped<IBookingHotelServices, BookingHotelServices>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {

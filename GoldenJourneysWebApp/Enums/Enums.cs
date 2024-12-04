@@ -31,7 +31,7 @@
     public enum TourType
     {
         Adventure,
-        Beach,
+        Beaches,
         Photography,
         Cruise,
         City,

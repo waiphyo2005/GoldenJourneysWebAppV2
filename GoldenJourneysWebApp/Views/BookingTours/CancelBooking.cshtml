@@ -1,0 +1,17 @@
+﻿@model TourBookingCancelViewModel
+@{
+	Layout = "_CustomerLayout";
+}
+
+<h3>Booking Details</h3>
+<p>Booking Id: @Model.BookingId</p>
+<p>Booking Tour Name: @Model.TourName</p>
+<p>Booked for Date: @Model.BookedDate</p>
+<p>Booked Capacity: @Model.BookedCapacity</p>
+<p class="mb-3">Total Price: @Model.TotalPrice</p>
+<h4>Are you sure you want to cancel this booking?</h4>
+
+<div class="mt-4">
+    <a class="btn btn-danger" asp-controller="BookingTours" asp-action="ConfirmCancelBooking" asp-route-bookingId="@Model.BookingId">Yes, Cancel</a>
+    <a class="btn btn-secondary" asp-controller="BookingTours" asp-action="UserTourBookings">No</a>
+</div>
