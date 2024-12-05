@@ -13,5 +13,8 @@ namespace GoldenJourneysWebApp.Repository
         double CalculateTotalPrice(UserRoomViewandBookingModel booking);
         void BookRoomQty(HBookingConfirmationViewModel booking);
         void RecordBooking(HBookingConfirmationViewModel booking);
+        List<UserHotelBookingsViewModel> GetAllBookings(int userId);
+        HotelCancelBookingViewModel GetBooking(int bookingId);
+        void CancelBooking (int bookingId);
     }
 }

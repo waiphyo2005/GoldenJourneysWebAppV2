@@ -104,7 +104,7 @@ namespace GoldenJourneysWebApp.Controllers
 							var claimsIdentity = new ClaimsIdentity(claims,CookieAuthenticationDefaults.AuthenticationScheme);
 							HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-							return RedirectToAction("Index", "Admin");
+							return RedirectToAction("AdminHome", "Admin");
 						}
 						if (user.Type == "Customer")
 						{
@@ -117,7 +117,7 @@ namespace GoldenJourneysWebApp.Controllers
                             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                             HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                            return RedirectToAction("LoginHome", "Customer");
+                            return RedirectToAction("LoginHome", "Customer"); 
                         }
 					}
 				}

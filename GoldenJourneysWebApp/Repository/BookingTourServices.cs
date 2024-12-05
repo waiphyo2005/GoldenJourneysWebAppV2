@@ -43,6 +43,7 @@ namespace GoldenJourneysWebApp.Repository
                     description = t.Description,
                     StateorRegion = t.StateorRegion,
                     gallery = t.ToursMediaContent.Where(m => m.TourId == tourId).ToList(),
+                    selectedBookingDate = DateOnly.FromDateTime(DateTime.Now),
                 }).FirstOrDefault();
             return tourDetails;
         }

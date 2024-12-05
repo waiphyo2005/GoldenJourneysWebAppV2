@@ -1,0 +1,58 @@
+﻿@model List<UserHotelBookingsViewModel>
+@{
+	Layout = "_CustomerLayout";
+}
+<div class="container mt-5">
+	<h2 class="text-center mb-5">List of Hotel Bookings</h2>
+	<h4 class="text-success text-center mb-5">@TempData["Message"]</h4>
+</div>
+<table class="table mt-4">
+	<thead class="text-center">
+		<tr>
+			<td>No.</td>
+			<td>Hotel</td>
+			<td>Room</td>
+			<td>Room Quantity</td>
+			<td>Check in</td>
+			<td>Check out</td>
+			<td>Special Request</td>
+			<td>Total Price</td>
+			<td>Status</td>
+			<td>Action</td>
+		</tr>
+	</thead>
+	<tbody class="text-center">
+		@{
+			int counter = 1;
+		}
+		@foreach (var booking in Model)
+		{
+			<tr>
+				<td>@counter.</td>
+				<td>@booking.HotelName</td>
+				<td>@booking.RoomName</td>
+				<td>@booking.RoomQty</td>
+				<td>@booking.FromDate</td>
+				<td>@booking.ToDate</td>
+				<td>@booking.SpecialRequest</td>
+				<td>@booking.TotalPrice</td>
+				@if (booking.Status == "Cancelled")
+				{
+					<td class="text-danger">@booking.Status</td>
+				}
+				else
+				{
+					<td class="text-success">@booking.Status</td>
+				}
+				<td>
+					@if (booking.Status != "Cancelled")
+					{
+						<a class="btn btn-danger" asp-controller="BookingHotels" asp-action="CancelBooking" asp-route-bookingId="@booking.BookingId">Cancel</a>
+					}
+				</td>
+			</tr>
+			counter++;
+		}
+	</tbody>
+</table>
+

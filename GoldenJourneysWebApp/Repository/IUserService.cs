@@ -18,5 +18,6 @@ namespace GoldenJourneysWebApp.Repository
         ResetPasswordViewModel GetUserForPasswordReset(int userId);
         void UpdatePassword(ResetPasswordViewModel user);
         UserViewModel GetUserById(int userId);
+        AdminHomeViewModel GetAllDetails();
     }
 }

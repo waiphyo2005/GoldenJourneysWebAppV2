@@ -57,13 +57,16 @@ namespace GoldenJourneysWebApp.Repository
                    price = t.Price,
                    description = t.Description,
                    gallery = t.RoomMediaContent.Where(m => m.RoomId == roomId).ToList(),
+                   selectedBookingStartDate = DateOnly.FromDateTime(DateTime.Now),
+                   selectedBookingEndDate = DateOnly.FromDateTime(DateTime.Now),
+                   hotelName = t.Hotels.Name,
                }).FirstOrDefault();
             return roomDetails;
         }
         public List<DateOnly> CreateDateList(DateOnly StartDate, DateOnly EndDate)
         {
             List<DateOnly> dateList = new List<DateOnly>();
-            for (DateOnly date = StartDate; date <= EndDate; date = date.AddDays(1))
+            for (DateOnly date = StartDate; date < EndDate; date = date.AddDays(1))
             {
                 dateList.Add(date);
             }
@@ -102,7 +105,8 @@ namespace GoldenJourneysWebApp.Repository
         }
         public double CalculateTotalPrice(UserRoomViewandBookingModel booking)
         {
-            double totalPrice = booking.price * booking.bookingQty;
+            var totalDates = CreateDateList(booking.selectedBookingStartDate, booking.selectedBookingEndDate).Count();
+			double totalPrice = totalDates*(booking.price * booking.bookingQty);
             return totalPrice;
         }
         public void BookRoomQty(HBookingConfirmationViewModel booking)
@@ -126,9 +130,76 @@ namespace GoldenJourneysWebApp.Repository
                 TotalPrice = booking.totalPrice,
                 Status = "Confirmed",
                 SpecialRequest = booking.specialRequest,
+                RoomQty = booking.selectedQty,
+                FromDate = booking.selectedStartDate,
+                ToDate = booking.selectedEndDate,
             };
             _context.BookingHotels.Add(newBooking);
             _context.SaveChanges();
+
+            var bookingId = newBooking.Id;
+			var dates = CreateDateList(booking.selectedStartDate, booking.selectedEndDate);
+            foreach(var date in dates)
+            {
+                var newSlot = new RoomBook
+                {
+                    BookingHotelId = bookingId,
+                    RoomAvailabilityId = _context.RoomsAvailability.Where(a => a.RoomId == booking.roomId && a.AvailableDate == date).Select(a => a.Id).FirstOrDefault(),
+                };
+                _context.BookingBook.Add(newSlot);
+                _context.SaveChanges();
+            }
+		}
+		public List<UserHotelBookingsViewModel> GetAllBookings(int userId)
+        {
+            var bookings = _context.BookingHotels.Where(b => b.UserId == userId)
+                .Select(b => new UserHotelBookingsViewModel
+                {
+                    BookingId = b.Id,
+                    HotelName = b.RoomBook.Where(r => r.BookingHotelId == b.Id).FirstOrDefault().RoomAvailability.Rooms.Hotels.Name,
+                    RoomName = b.RoomBook.Where(r => r.BookingHotelId == b.Id).FirstOrDefault().RoomAvailability.Rooms.Name,
+                    FromDate = b.FromDate,
+                    ToDate = b.ToDate,
+                    RoomQty = b.RoomQty,
+                    SpecialRequest = b.SpecialRequest,
+                    Status = b.Status,
+                    TotalPrice = b.TotalPrice,
+				}).ToList();
+            return bookings;
         }
+        public HotelCancelBookingViewModel GetBooking(int bookingId)
+        {
+            var booking = _context.BookingHotels.Where(b => b.Id == bookingId)
+                .Select(b => new HotelCancelBookingViewModel
+                {
+                    bookingId = b.Id,
+                    hotelName = b.RoomBook.Where(r => r.BookingHotelId == b.Id).FirstOrDefault().RoomAvailability.Rooms.Hotels.Name,
+                    roomName = b.RoomBook.Where(r => r.BookingHotelId == b.Id).FirstOrDefault().RoomAvailability.Rooms.Name,
+                    FromDate= b.FromDate,
+                    ToDate= b.ToDate,
+                    RoomQty= b.RoomQty,
+                    TotalPrice= b.TotalPrice,
+
+                }).FirstOrDefault();
+            return booking;
+        }
+        public void CancelBooking(int bookingId)
+        {
+            var booking = _context.BookingHotels.Where(b => b.Id == bookingId).FirstOrDefault();
+            booking.Status = "Cancelled";
+            _context.BookingHotels.Update(booking);
+            _context.SaveChanges();
+
+            var bookingSlots = _context.BookingBook.Where(b => b.BookingHotelId == bookingId).ToList();
+            foreach (var bookingSlot in bookingSlots)
+            {
+                var availability = _context.RoomsAvailability.Where(a => a.Id == bookingSlot.RoomAvailabilityId).FirstOrDefault();
+                availability.AvailableQty += booking.RoomQty;
+                _context.RoomsAvailability.Update(availability);
+                _context.SaveChanges();
+            }
+        }
+
+
     }
 }

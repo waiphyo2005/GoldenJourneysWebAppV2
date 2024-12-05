@@ -180,6 +180,28 @@ namespace GoldenJourneysWebApp.Repository
                 }).FirstOrDefault();
             return user;
         }
+        public AdminHomeViewModel GetAllDetails()
+        {
+            var users = _context.Users.Where(u => u.Status == "Active").Count();
+            var admins = _context.Users.Where(u => u.UserTypeId == 2 && u.Status == "Active").Count();
+            var customers = _context.Users.Where(u => u.UserTypeId == 1 && u.Status == "Active").Count();
+            var hotels = _context.Hotels.Where(h => h.Status == "Active").Count();
+            var tours = _context.Tours.Where(t => t.Status == "Active").Count();
+            var bookings = _context.BookingHotels.Count() + _context.BookingTours.Count();
+            var bookingCancel = _context.BookingHotels.Where(b => b.Status == "Cancelled").Count() + _context.BookingTours.Where(t => t.Status == "Cancelled").Count();
+
+            var allDetails = new AdminHomeViewModel
+            {
+                users = users,
+                admins = admins,
+                customers = customers,
+                hotels = hotels,
+                tours = tours,
+                bookings = bookings,
+                bookingCancelled = bookingCancel
+            };
+            return allDetails;
+        }
 
     }
 }

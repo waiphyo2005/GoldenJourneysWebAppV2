@@ -16,6 +16,16 @@ namespace GoldenJourneysWebApp.Controllers
             _userService = userService;
         }
 
+        //Home Page
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult AdminHome()
+        {
+            var details = _userService.GetAllDetails();
+            return View(details);
+        }
+
+
         //View Users
         [Authorize(Roles = "Admin")]
         [HttpGet]

@@ -17,6 +17,9 @@ namespace GoldenJourneysWebApp.Data.Entities
         public double TotalPrice { get; set; }
         public string? Status { get; set; }
         public string? SpecialRequest { get; set; }
+        public int RoomQty { get; set; }
+        public DateOnly FromDate { get; set; }
+        public DateOnly ToDate { get; set; }
         public ICollection<RoomBook> RoomBook { get; set; }
     }
 }

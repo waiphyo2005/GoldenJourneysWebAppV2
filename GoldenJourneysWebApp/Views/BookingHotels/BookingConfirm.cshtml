@@ -13,14 +13,15 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <p class="mb-2"><strong class="text-muted">User Name:</strong> @Model.userName</p>
+                            <p class="mb-2"><strong class="text-muted">HotelName:</strong> @Model.hotelName</p>
                             <p class="mb-2"><strong class="text-muted">Room Name:</strong> @Model.roomName</p>
                             <p class="mb-2"><strong class="text-muted">Selected Room Quantity:</strong> @Model.selectedQty</p>
                         </div>
                         <div class="col-md-6">
-                            <p class="mb-2"><strong class="text-muted">Selected From Date:</strong> @Model.selectedStartDate.ToString("yyyy-MM-dd")</p>
-                            <p class="mb-2"><strong class="text-muted">Selected To Date:</strong> @Model.selectedEndDate.ToString("yyyy-MM-dd")</p>
+                            <p class="mb-2"><strong class="text-muted">Check in Date:</strong> @Model.selectedStartDate.ToString("yyyy-MM-dd")</p>
+                            <p class="mb-2"><strong class="text-muted">Check out Date:</strong> @Model.selectedEndDate.ToString("yyyy-MM-dd")</p>
                             <p class="mb-2"><strong class="text-muted">Special Request:</strong> @Model.specialRequest</p>
-                            <p class="mb-2"><strong class="text-muted">Total Price:</strong> @Model.totalPrice</p>
+                            <p class="mb-2"><strong class="text-muted">Total Price:</strong> $ @Model.totalPrice</p>
                         </div>
                     </div>
                 </div>
@@ -35,6 +36,7 @@
                 <input type="hidden" asp-for="selectedEndDate" value="@Model.selectedEndDate" />
                 <input type="hidden" asp-for="totalPrice" value="@Model.totalPrice" />
                 <input type="hidden" asp-for="userName" value="@Model.userName" />
+                <input type="hidden" asp-for="hotelName" value="@Model.hotelName" />
 
                 <div class="card-header bg-info text-white">
                     <h3 class="card-title mb-0">Payment Information</h3>

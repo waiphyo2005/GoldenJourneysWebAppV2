@@ -34,7 +34,10 @@ namespace GoldenJourneysWebApp.Controllers
         public IActionResult GetRoomDetails(UserRoomViewandBookingModel booking)
         {
             ViewData["userId"] = booking.userId;
-
+            if(booking.selectedBookingStartDate >= booking.selectedBookingEndDate)
+            {
+                ModelState.AddModelError("selectedBookingStartDate", "Check-in date must be prior to Check-out date.");
+            }
             var isDateAvailable = _bookingHotelServices.isDateAvailable(booking);
             if (!isDateAvailable)
             {
@@ -71,6 +74,7 @@ namespace GoldenJourneysWebApp.Controllers
                 specialRequest = booking.additionalRequest,
                 totalPrice = _bookingHotelServices.CalculateTotalPrice(booking),
                 userName = _bookingHotelServices.GetUserNameById(booking),
+                hotelName = booking.hotelName,
             };
             return View(bookingConfirm);
         }
@@ -81,10 +85,31 @@ namespace GoldenJourneysWebApp.Controllers
             {
                 _bookingHotelServices.BookRoomQty(booking);
                 _bookingHotelServices.RecordBooking(booking);
-                TempData["Message"] = "Tour has been successfully booked!";
-                return RedirectToAction("UserTourBookings", "BookingToursController");
+                TempData["Message"] = "Hotel has been successfully booked!";
+                return RedirectToAction("UserHotelBookings", "BookingHotels");
             }
             return View(booking);
+        }
+
+        [HttpGet]
+        public IActionResult UserHotelBookings()
+        {
+			var userId = Convert.ToInt32(HttpContext.User.Identity.Name);
+            var bookings = _bookingHotelServices.GetAllBookings(userId);
+			return View(bookings);
+        }
+
+        [HttpGet]
+        public IActionResult CancelBooking(int bookingId)
+        {
+            var booking = _bookingHotelServices.GetBooking(bookingId);
+            return View(booking);
+        }
+        public IActionResult ConfirmCancel(int bookingId)
+        {
+            _bookingHotelServices.CancelBooking(bookingId);
+            TempData["Message"] = "Booking has been Cancelled!";
+            return RedirectToAction("UserHotelBookings", "BookingHotels");
         }
     }
 }

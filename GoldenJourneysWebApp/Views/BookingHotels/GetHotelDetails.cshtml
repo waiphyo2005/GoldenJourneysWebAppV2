@@ -24,16 +24,23 @@
 
     <h3 class="mt-4">Rooms</h3>
     <div class="row">
-        @foreach (var room in Model.Rooms)
+        @if(Model.Rooms.Count() != 0)
         {
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">@room.Name</h5>
-                        <a asp-controller="BookingHotels" asp-action="GetRoomDetails" asp-route-roomId="@room.Id" class="btn btn-primary">View Details</a>
+            @foreach (var room in Model.Rooms)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">@room.Name</h5>
+                            <a asp-controller="BookingHotels" asp-action="GetRoomDetails" asp-route-roomId="@room.Id" class="btn btn-primary">View Details</a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
+        }
+        else
+        {
+            <p class="text-danger">No rooms available at the moment..</p>
         }
     </div>
 </div>

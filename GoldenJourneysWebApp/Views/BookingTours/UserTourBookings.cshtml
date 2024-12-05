@@ -13,7 +13,7 @@
 			<th>Tour Name</th>
 			<th>Booked Date</th>
 			<th>Booked Capacity</th>
-			<th>Booking Id</th>
+			@* <th>Booking Id</th> *@
 			<th>Booking Status</th>
 			<th>Special Request</th>
 			<th>Total Price</th>
@@ -32,7 +32,7 @@
 				<td>@booking.tourName</td>
 				<td>@booking.bookedDate</td>
 				<td>@booking.bookedCapacity</td>
-				<td>@booking.bookingId</td>
+				@* <td>@booking.bookingId</td> *@
 				@if (booking.status == "Cancelled")
 				{
 					<td class="text-danger">@booking.status</td>
@@ -45,7 +45,10 @@
 				<td>@booking.totalPrice</td>
 				@* <td>@booking.created</td> *@
 				<td>
-					<a class="btn btn-danger" asp-controller="BookingTours" asp-action="CancelBooking" asp-route-bookingId="@booking.bookingId">Cancel</a>
+					@if(booking.status != "Cancelled")
+					{
+						<a class="btn btn-danger" asp-controller="BookingTours" asp-action="CancelBooking" asp-route-bookingId="@booking.bookingId">Cancel</a>
+					}
 				</td> 
 			</tr>
 			counter++;
